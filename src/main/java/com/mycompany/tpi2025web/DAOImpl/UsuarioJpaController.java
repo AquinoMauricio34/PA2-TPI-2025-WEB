@@ -9,11 +9,11 @@ import com.mycompany.tpi2025web.DAOImpl.exceptions.PreexistingEntityException;
 import com.mycompany.tpi2025web.model.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import java.io.Serializable;
-import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -31,6 +31,22 @@ public class UsuarioJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public <T extends Usuario> List<T> findPorClase(Class<T> tipoClase) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            return em.createQuery(
+                "SELECT u FROM Usuario u WHERE TYPE(u) = :tipo",
+                tipoClase
+            )
+            .setParameter("tipo", tipoClase)
+            .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    
     public void create(Usuario usuario) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {

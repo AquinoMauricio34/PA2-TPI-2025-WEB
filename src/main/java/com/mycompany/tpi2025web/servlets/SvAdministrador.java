@@ -12,9 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +33,11 @@ public class SvAdministrador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AdministradorJpaController dao = new AdministradorJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        List<Administrador> listaAdmin = new ArrayList<>();
-        listaAdmin = dao.findAdministradorEntities();
-        HttpSession s = request.getSession();
-        s.setAttribute("listaAdmin", listaAdmin);
-        response.sendRedirect("verAdministrador.jsp");
+        
+        
+        String uri = request.getRequestURI();
+        
+        if(uri.endsWith("lista")) obtenerlista(request,response);
         
     }
 
@@ -64,7 +61,7 @@ public class SvAdministrador extends HttpServlet {
             ex.printStackTrace();
         }
         
-        response.sendRedirect("index.jsp");
+        response.sendRedirect(request.getContextPath()+"/SvPanel?vista=index.jsp");
         
         
     }
@@ -74,5 +71,13 @@ public class SvAdministrador extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void obtenerlista(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        AdministradorJpaController dao = new AdministradorJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+        List<Administrador> listaAdmin = dao.findAdministradorEntities();
+        
+        request.setAttribute("listaAdmin", listaAdmin);
+        request.getRequestDispatcher("/SvPanel?vista=verAdministrador.jsp").forward(request,response);
+    }
 
 }

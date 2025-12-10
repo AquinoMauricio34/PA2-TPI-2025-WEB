@@ -73,7 +73,10 @@ public class SvLogin extends HttpServlet {
         if(validacion){
             HttpSession s = request.getSession(true);
             s.setAttribute("usuario", nombreUsuario);
-            response.sendRedirect("index.jsp");
+            //response.sendRedirect("index.jsp");
+            response.sendRedirect(
+                request.getContextPath() + "/SvPanel?vista=index.jsp"
+            );
         }else{
             response.sendRedirect("login.jsp");
         }

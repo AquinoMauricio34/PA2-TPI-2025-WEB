@@ -1,37 +1,37 @@
-<%-- 
-    Document   : editarAdministrador
-    Created on : 5 dic 2025, 8:10:49 p. m.
-    Author     : aquin
---%>
-
-<%@page import="com.mycompany.tpi2025web.model.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@include file="componentes/header.jsp" %>
-<%@include file="componentes/body1.jsp" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <h1>Edición Administrador</h1>
-<% Usuario usu = (Usuario) request.getSession().getAttribute("usuarioEditar"); %>
-<form class="user" action="SvEditAdministradores" method="POST">
+
+<c:set var="usu" value="${usuarioEditar}" />
+
+<form class="user" action="${pageContext.request.contextPath}/SvUsuario/editar" method="POST">
+    <input type="hidden" name="usuarioOriginal"
+           value="${usu.nombreUsuario}">
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
             <input type="text" class="form-control form-control-user" id="nombre" name="nombre"
-                   placeholder="Nombre y Apellido" value="<%=usu.getNombre() %>">
+                   placeholder="Nombre y Apellido" value="${usu.nombre}">
         </div>
         <div class="col-sm-6 mb-3">
-            <input type="text" class="form-control form-control-user" id="telefono" name ="telefono"
-                placeholder="Teléfono" value="<%=usu.getTelefono() %>">
+            <input type="text" class="form-control form-control-user" id="telefono" name="telefono"
+                   placeholder="Teléfono" value="${usu.telefono}">
         </div>
         <div class="col-sm-6 mb-3">
-            <input  type="text" class="form-control form-control-user"
-                   id="usuario" name="usuario" placeholder="Usuario" value="<%=usu.getNombreUsuario()%>" disabled>
-        </div>
-        <!--<div class="col-sm-6 mb-3">
             <input type="text" class="form-control form-control-user"
-                id="contrasenia" name="contrasenia" placeholder="Contrasenia" value="<%=usu.getNombre() %>">
-        </div>-->
+                   id="usuario" name="usuario" placeholder="Usuario" value="${usu.nombreUsuario}" disabled>
+            <!-- Campo oculto para enviar el usuario (ya que el campo visible está disabled) -->
+            <input type="hidden" name="nombreUsuario" value="${usu.nombreUsuario}">
+        </div>
+        <!-- Opcional: Si necesitas mostrar o editar la contraseña
+        <div class="col-sm-6 mb-3">
+            <input type="password" class="form-control form-control-user"
+                id="contrasenia" name="contrasenia" placeholder="Contraseña">
+        </div>
+        -->
     </div>
     
     <button class="btn btn-primary btn-user btn-block" type="submit">
-        Registrar
+        Actualizar
     </button>
 </form>
-<%@include file="componentes/body2.jsp" %>

@@ -1,13 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<h1>Ver ${titulo}</h1>
-
 <div class="container-fluid">
     <div class="card shadow mb-4">
 
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">${titulo}</h6>
+            <h3 class="m-0 font-weight-bold text-primary">${titulo}</h3>
         </div>
 
         <div class="card-body">

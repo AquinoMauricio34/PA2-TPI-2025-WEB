@@ -76,7 +76,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Administrador">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Administrador">Buscar</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Administrador">Ver</a>
                         <a class="collapse-item" href="#">Reporte</a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Voluntario">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Voluntario">Buscar</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Voluntario">Ver</a>
                     </div>
                 </div>
             </li>
@@ -108,7 +108,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Veterinario">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Veterinario">Buscar</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Veterinario">Ver</a>
                     </div>
                 </div>
             </li>
@@ -125,7 +125,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Familia">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Familia">Buscar</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Familia">Ver</a>
                     </div>
                 </div>
             </li>
@@ -142,7 +142,24 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Hogar">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Hogar">Buscar</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Hogar">Ver</a>
+                    </div>
+                </div>
+            </li>
+            
+            <!-- Sección Zona -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseZonas"
+                    aria-expanded="true" aria-controls="collapseZonas">
+                    <i class="fas fa-fw fa-hotel"></i> <!-- Icono para hogar -->
+                    <span>Zonas</span>
+                </a>
+                <div id="collapseZonas" class="collapse" aria-labelledby="headingZonas"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=mapa.jsp">Aniadir</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvZona/listar">Ver</a>
                     </div>
                 </div>
             </li>

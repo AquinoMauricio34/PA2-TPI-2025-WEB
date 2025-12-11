@@ -20,7 +20,9 @@
                             <th>Nombre</th>
                             <th>Teléfono</th>
                             <th>Usuario</th>
-                            <th>Tipo</th>
+                            <c:if test="${titulo eq 'Hogar'}">
+                                <th>¿Es Transitorio?</th>
+                            </c:if>
                             <th style="width: 210px">Acciones</th>
                         </tr>
                     </thead>
@@ -31,7 +33,14 @@
                                 <td>${u.nombre}</td>
                                 <td>${u.telefono}</td>
                                 <td>${u.nombreUsuario}</td>
-                                <td>${u.tipoUsuario}</td>
+                                <c:if test="${titulo eq 'Hogar'}">
+                                    <c:if test="${u.transitorio == true}">
+                                        <td>Si</td>
+                                    </c:if>
+                                    <c:if test="${u.transitorio == false}">
+                                        <td>No</td>
+                                    </c:if>
+                                </c:if>
 
                                 <td style="display: flex; width: 230px;">
 

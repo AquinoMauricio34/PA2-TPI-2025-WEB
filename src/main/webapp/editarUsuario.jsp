@@ -1,7 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<h1>Edición Administrador</h1>
+
+<h1>Edición ${tipo}</h1>
 
 <c:set var="usu" value="${usuarioEditar}" />
 

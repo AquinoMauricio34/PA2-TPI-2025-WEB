@@ -8,6 +8,7 @@ import com.mycompany.tpi2025web.DAOImpl.UsuarioJpaController;
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Administrador;
 import com.mycompany.tpi2025web.model.Familia;
+import com.mycompany.tpi2025web.model.Hogar;
 import com.mycompany.tpi2025web.model.Usuario;
 import com.mycompany.tpi2025web.model.Veterinario;
 import com.mycompany.tpi2025web.model.Voluntario;
@@ -32,7 +33,8 @@ public class SvUsuario extends HttpServlet {
         "Administrador", Administrador.class,
         "Veterinario", Veterinario.class,
         "Voluntario", Voluntario.class,
-        "Familia", Familia.class
+        "Familia", Familia.class,
+        "Hogar", Hogar.class
     );
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -81,12 +83,18 @@ public class SvUsuario extends HttpServlet {
                 (EntityManagerFactory) request.getServletContext().getAttribute("emf")
             );
 
-        List<? extends Usuario> lista = dao.findPorClase(clase);
-
+        if(!"Hogar".equals(tipo)){
+            List<? extends Usuario> lista = dao.findPorClase(clase);
+            request.setAttribute("listaUsuarios", lista);
+        }else{
+            List<Hogar> lista = dao.findPorClase(Hogar.class);   
+            request.setAttribute("listaUsuarios", lista);
+        }
+        
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-        request.setAttribute("listaUsuarios", lista);
-        request.setAttribute("titulo", tipo.toUpperCase());
+        
+        request.setAttribute("titulo", tipo);
         request.setAttribute("contenido", "/verUsuarios.jsp");
 
         request.getRequestDispatcher("/layout.jsp").forward(request, response);
@@ -138,8 +146,11 @@ public class SvUsuario extends HttpServlet {
         UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         Usuario usuarioEditar = dao.findUsuario(request.getParameter("usuario"));
         request.setAttribute("usuarioEditar", usuarioEditar);
-        request.setAttribute("contenido", "/editarAdministrador.jsp");
-
+        request.setAttribute("tipo", usuarioEditar.getTipoUsuario());
+        request.setAttribute("contenido", "/editarUsuario.jsp");
+        
+        System.out.println(usuarioEditar);
+        
         try {
             Logger.getLogger("a").log(Level.SEVERE, "AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa");
             request.getRequestDispatcher("/layout.jsp").forward(request, response);
@@ -158,7 +169,8 @@ public class SvUsuario extends HttpServlet {
         String telefono = request.getParameter("telefono");
         String usuario = request.getParameter("usuario");
         String contrasenia = request.getParameter("contrasenia");
-
+        String isTransitorio = request.getParameter("isTransitorio");
+        System.out.println(isTransitorio+"----------------------------------------------------------------------");
         System.out.println("Creando usuario - Tipo: " + tipo + ", Nombre: " + nombre + 
                            ", Teléfono: " + telefono + ", Usuario: " + usuario);
 
@@ -170,15 +182,22 @@ public class SvUsuario extends HttpServlet {
             }
 
             // Obtener el constructor con los parámetros necesarios
-            Constructor<? extends Usuario> constructor = usuarioClass.getConstructor(
+            Constructor<? extends Usuario> constructor = !tipo.equals("Hogar") ? usuarioClass.getConstructor(
                 String.class, // nombre
                 String.class, // contrasenia
                 String.class, // telefono
                 String.class  // nombreUsuario
+            ) : usuarioClass.getConstructor(
+                String.class, // nombre
+                String.class, // contrasenia
+                String.class, // telefono
+                String.class,  // nombreUsuario
+                boolean.class
             );
-
+            System.out.println("constructor ADQUIRIDO");
             // Crear la instancia
-            Usuario nuevoUsuario = constructor.newInstance(nombre, contrasenia, telefono, usuario);
+            Usuario nuevoUsuario = !tipo.equals("Hogar") ? constructor.newInstance(nombre, contrasenia, telefono, usuario) : constructor.newInstance(nombre, contrasenia, telefono, usuario,isTransitorio!=null);
+            System.out.println("constructor INSTANCIADO");
 
             // Persistir en la base de datos
             dao.create(nuevoUsuario);

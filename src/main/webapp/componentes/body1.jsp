@@ -82,19 +82,67 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios"
-                    aria-expanded="true" aria-controls="collapseUsuarios">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVoluntarios"
+                    aria-expanded="true" aria-controls="collapseVoluntarios">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Usuarios</span>
+                    <span>Voluntarios</span>
                 </a>
-                <div id="collapseUsuarios" class="collapse" aria-labelledby="headingUsuarios"
+                <div id="collapseVoluntarios" class="collapse" aria-labelledby="headingVoluntarios"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="#">Crear</a>
-                        <a class="collapse-item" href="#">Eliminar</a>
-                        <a class="collapse-item" href="#">Buscar</a>
-                        <a class="collapse-item" href="#">Reporte</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Voluntario">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Voluntario">Buscar</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Sección Veterinario -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVeterinarios"
+                    aria-expanded="true" aria-controls="collapseVeterinarios">
+                    <i class="fas fa-fw fa-stethoscope"></i> <!-- Icono para veterinario -->
+                    <span>Veterinarios</span>
+                </a>
+                <div id="collapseVeterinarios" class="collapse" aria-labelledby="headingVeterinarios"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Veterinario">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Veterinario">Buscar</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Sección Familia -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFamilias"
+                    aria-expanded="true" aria-controls="collapseFamilias">
+                    <i class="fas fa-fw fa-home"></i> <!-- Icono para familia -->
+                    <span>Familias</span>
+                </a>
+                <div id="collapseFamilias" class="collapse" aria-labelledby="headingFamilias"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Familia">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Familia">Buscar</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Sección Hogar -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHogares"
+                    aria-expanded="true" aria-controls="collapseHogares">
+                    <i class="fas fa-fw fa-hotel"></i> <!-- Icono para hogar -->
+                    <span>Hogares</span>
+                </a>
+                <div id="collapseHogares" class="collapse" aria-labelledby="headingHogares"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Hogar">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Hogar">Buscar</a>
                     </div>
                 </div>
             </li>

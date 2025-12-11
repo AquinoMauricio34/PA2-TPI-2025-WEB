@@ -5,20 +5,20 @@
     <input type="hidden" name="tipo" value="${param.tipo}">
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
-            <input type="text" class="form-control form-control-user" id="nombre" name="nombre"
-                placeholder="Nombre y Apellido">
+            <input type="text" class="form-control" id="nombre" name="nombre"
+                   placeholder="Nombre y Apellido" required>
         </div>
         <div class="col-sm-6 mb-3">
-            <input type="text" class="form-control form-control-user" id="telefono" name ="telefono"
-                placeholder="Teléfono">
+            <input type="text" class="form-control" id="telefono" name ="telefono"
+                placeholder="Teléfono" required>
         </div>
         <div class="col-sm-6 mb-3">
-            <input type="text" class="form-control form-control-user"
-                   id="usuario" name="usuario" placeholder="Usuario">
+            <input type="text" class="form-control"
+                   id="usuario" name="usuario" placeholder="Usuario" required>
         </div>
         <div class="col-sm-6 mb-3">
-            <input type="text" class="form-control form-control-user"
-                id="contrasenia" name="contrasenia" placeholder="Contrasenia">
+            <input type="text" class="form-control"
+                id="contrasenia" name="contrasenia" placeholder="Contrasenia" required>
         </div>
         <c:if test="${param.tipo eq 'Hogar'}">
             <div class="col-sm-6 mb-3">

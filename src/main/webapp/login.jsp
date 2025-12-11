@@ -46,11 +46,11 @@
                                             <div class="form-group">
                                                 <input type="text" class="form-control form-control-user"
                                                        id="nombreUsuario" name="nombreUsuario" aria-describedby="usuarioHelp"
-                                                    placeholder="Nombre de usuario">
+                                                    placeholder="Nombre de usuario" required>
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" class="form-control form-control-user"
-                                                       id="contrasenia" name="contrasenia" placeholder="Contrasenia">
+                                                       id="contrasenia" name="contrasenia" placeholder="Contrasenia" required>
                                             </div>
                                             
                                             <button class="btn btn-primary btn-user btn-block" type="submit">

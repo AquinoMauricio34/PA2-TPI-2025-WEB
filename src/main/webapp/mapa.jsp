@@ -23,7 +23,7 @@
     <div class="form-group row">
         <div class="col-sm-4 mb-3">
             <input type="text" class="form-control form-control-user" id="nombreZona" name="nombreZona"
-                   placeholder="Nombre Zona">
+                   placeholder="Nombre Zona" required>
         </div>
         <div class="col-sm-4 mb-3">
             <input type="text" class="form-control form-control-user" id="lat" name="lat" readonly>

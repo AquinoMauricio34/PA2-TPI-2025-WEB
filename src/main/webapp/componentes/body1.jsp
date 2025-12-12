@@ -146,6 +146,7 @@
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvGato/cargar_alta">Crear</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvGato/listar">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvHistorial/seleccionar_gato?direccion=/SvHistorial/mostrar_historial">Historial</a>
                     </div>
                 </div>
             </li>

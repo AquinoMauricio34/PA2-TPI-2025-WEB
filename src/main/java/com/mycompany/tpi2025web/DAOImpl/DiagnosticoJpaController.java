@@ -6,15 +6,15 @@ package com.mycompany.tpi2025web.DAOImpl;
 
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Diagnostico;
-import java.io.Serializable;
-import jakarta.persistence.Query;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import com.mycompany.tpi2025web.model.HistorialGato;
 import com.mycompany.tpi2025web.model.Tratamiento;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,28 @@ public class DiagnosticoJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    //aniadido 11/12/2025 22:23
+    public List<Diagnostico> obtenerPorHistorial(Long historialId) {
+        EntityManager em = getEntityManager();
+        List<Diagnostico> diagnosticos = null;
 
+        try {
+            diagnosticos = em.createQuery(
+                    "SELECT d FROM Diagnostico d " +
+                    "WHERE d.historial.id = :historialId " +
+                    "ORDER BY d.fecha_diagnostico DESC",
+                    Diagnostico.class)
+                .setParameter("historialId", historialId)
+                .getResultList();
+        } finally {
+            em.close();
+        }
+
+        return diagnosticos;
+    }
+
+    
     public void create(Diagnostico diagnostico) {
         if (diagnostico.getTratamientos() == null) {
             diagnostico.setTratamientos(new ArrayList<Tratamiento>());

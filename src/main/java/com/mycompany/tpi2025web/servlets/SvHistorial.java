@@ -6,7 +6,6 @@ package com.mycompany.tpi2025web.servlets;
 
 import com.mycompany.tpi2025web.DAOImpl.DiagnosticoJpaController;
 import com.mycompany.tpi2025web.DAOImpl.GatoJpaController;
-import com.mycompany.tpi2025web.model.Diagnostico;
 import com.mycompany.tpi2025web.model.Gato;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
@@ -15,7 +14,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -33,11 +31,12 @@ public class SvHistorial extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         String uri = request.getRequestURI();
-        if(uri.endsWith("/mostrar_historial")){
-            mostrarHistorial(request,response);
-        }else if(uri.endsWith("/seleccionar_gato")){
+        if(uri.endsWith("/seleccionar_gato")){
             seleccionarGato(request,response);
+        }else if(uri.endsWith("/mostrar_historial")){
+            mostrarHistorial(request,response);
         }
     }
 
@@ -45,7 +44,11 @@ public class SvHistorial extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String uri = request.getRequestURI();
+        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk34");
+        if(uri.endsWith("/mostrar_historial")){
+            mostrarHistorial(request,response);
+        }
     }
 
     
@@ -57,14 +60,27 @@ public class SvHistorial extends HttpServlet {
     
 
     private void mostrarHistorial(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
+        System.out.println("QWERTY");
         DiagnosticoJpaController daoD = new DiagnosticoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         
-        Gato gato = daoG.findGato(Long.parseLong(request.getParameter("gato")));
-        List<Diagnostico> listaDiagnosticos = daoD.obtenerPorHistorial(gato.getHistorial().getId());
-        request.setAttribute("listaDiagnosticos", listaDiagnosticos);
-        request.setAttribute("contenido", "/verDiagnosticos.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+            System.out.println("P".repeat(120));
+        Gato gato;
+        if(request.getParameter("gato")==null){
+            System.out.println("Q".repeat(120));
+            gato = daoG.findGato((Long) request.getAttribute("gato"));
+            System.out.println("W".repeat(120));
+        }else{
+            System.out.println("e".repeat(120));
+            System.out.println(request.getParameter("gato"));
+            gato = daoG.findGato(Long.parseLong(request.getParameter("gato")));
+            System.out.println("r".repeat(120));
+        }
+        
+        System.out.println("H: "+gato.getHistorial().getId()+"-".repeat(20));
+        //request.setAttribute("gatoId", gato.getId());
+        
+        request.getRequestDispatcher("/SvDiagnostico/listar").forward(request, response);
         
     }
 

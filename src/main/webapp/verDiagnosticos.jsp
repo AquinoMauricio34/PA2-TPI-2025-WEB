@@ -3,9 +3,19 @@
 <div class="container-fluid">
     <div class="card shadow mb-4">
 
-        <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Diagnosticos</h3>
+        <input type="hidden" name="gatoId" value="${gato}">
+        
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h3 class="m-0 font-weight-bold text-primary">Diagnósticos</h3>
+            <input type="hidden" name="gatoId" value="${param.gato}">
+            <input type="hidden" name="diagnostico" value="${diagnostico}">
+            <!-- BOTÓN: Crear Diagnóstico -->
+            <a href="${pageContext.request.contextPath}/SvDiagnostico/llamar_mostrarDiagnostico?gato=${param.gato}"
+               class="btn btn-primary">
+                <i class="fas fa-plus"></i> Crear diagnóstico
+            </a>
         </div>
+
 
         <div class="card-body">
             <div class="table-responsive">
@@ -16,6 +26,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Diagnostico</th>
+                            <th>Descripcion</th>
                             <th>Fecha Diagnostico</th>
                             <th style="width: 210px">Acciones</th>
                         </tr>
@@ -26,11 +37,13 @@
                             <tr>
                                 <td>${u.id}</td>
                                 <td>${u.diagnostico}</td>
+                                <td>${u.descripcion}</td>
                                 <td>${u.fecha_diagnostico}</td>
                                 <td style="display: flex; width: 230px;">
 
                                     <!-- ELIMINAR -->
                                     <form action="${pageContext.request.contextPath}/SvDiagnostico/eliminar" method="POST">
+                                        <input type="hidden" name="gatoId" value="${gato}">
                                         <input type="hidden" name="diagnostico" value="${u.id}">
                                         <button type="submit"
                                             class="btn btn-danger btn-user btn-block"
@@ -42,10 +55,11 @@
                                     <!-- EDITAR -->
                                     <form action="${pageContext.request.contextPath}/SvDiagnostico/cargar_editar" method="GET"
                                         style="margin-left: 5px;">
+                                        <input type="hidden" name="gatoId" value="${gato}">
                                         <input type="hidden" name="diagnostico" value="${u.id}">
                                         <button type="submit"
                                             class="btn btn-primary btn-user btn-block">
-                                            <i class="fas fa-pencil-alt"></i> Editar
+                                            <i class="fas fa-pencil-alt"></i> Ver
                                         </button>
                                     </form>
 

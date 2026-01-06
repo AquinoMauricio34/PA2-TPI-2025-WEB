@@ -5,15 +5,15 @@
 package com.mycompany.tpi2025web.DAOImpl;
 
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
-import java.io.Serializable;
-import jakarta.persistence.Query;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import com.mycompany.tpi2025web.model.Diagnostico;
 import com.mycompany.tpi2025web.model.Tratamiento;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -31,6 +31,24 @@ public class TratamientoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public List<Tratamiento> obtenerPorDiagnostico(Long diagnosticoId) {
+        EntityManager em = getEntityManager();
+        List<Tratamiento> tratamientos = null;
+
+        try {
+            tratamientos = em.createQuery(
+                    "SELECT d FROM Tratamiento d " +
+                    "WHERE d.diagnostico.id = :diagnosticoId ",
+                    Tratamiento.class)
+                .setParameter("diagnosticoId", diagnosticoId)
+                .getResultList();
+        } finally {
+            em.close();
+        }
+
+        return tratamientos;
+    }
+    
     public void create(Tratamiento tratamiento) {
         EntityManager em = null;
         try {

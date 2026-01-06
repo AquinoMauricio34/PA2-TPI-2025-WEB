@@ -88,6 +88,11 @@ public class Tratamiento implements Serializable {
     public void setDiagnostico(Diagnostico diagnostico) {
         this.diagnostico = diagnostico;
     }
+
+    @Override
+    public String toString() {
+        return "Tratamiento{" + "id=" + id + ", diagnostico=" + diagnostico + ", descripcion=" + descripcion + ", fecha_inicio=" + fecha_inicio + ", fecha_fin=" + fecha_fin + ", abandono_tratamiento=" + abandono_tratamiento + '}';
+    }
     
     
     

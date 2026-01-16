@@ -52,6 +52,15 @@
                                             <i class="fas fa-pencil-alt"></i> Editar
                                         </button>
                                     </form>
+                                    <!-- VER QR -->
+                                    <form action="${pageContext.request.contextPath}/SvGato/ver_qr" method="GET"
+                                        style="margin-left: 5px;">
+                                        <input type="hidden" name="gatoToString" value="${u.toString()}">
+                                        <button type="submit"
+                                            class="btn btn-secondary btn-user btn-block">
+                                            <i class="fas fa-qrcode"></i> QR
+                                        </button>
+                                    </form>
 
                                 </td>
                             </tr>
@@ -64,3 +73,35 @@
         </div>
     </div>
 </div>
+
+<c:if test="${not empty qrBase64}">
+    <div class="modal fade show" id="modalQR" tabindex="-1"
+         style="display:block; background: rgba(0,0,0,0.5);">
+        
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-qrcode"></i> Código QR del gato
+                    </h5>
+                    
+                </div>
+
+                <div class="modal-body text-center">
+                    <img src="data:image/png;base64,${qrBase64}"
+                         alt="QR del gato"
+                         style="width: 200px; height: 200px;">
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary"
+                            onclick="document.getElementById('modalQR').style.display='none'">
+                        Cerrar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</c:if>

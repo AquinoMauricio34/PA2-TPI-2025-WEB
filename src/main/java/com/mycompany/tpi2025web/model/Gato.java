@@ -144,4 +144,11 @@ public class Gato implements Serializable {
     public void setZona(Zona zona) {
         this.zona = zona;
     }
+
+    @Override
+    public String toString() {
+        return "Gato:\n" + "\t* id=" + id + ",\n\t* estadoSalud=" + estadoSalud + ",\n\t* zona=" + zona.getLocalizacion() + ",\n\t* nombre=" + nombre + ",\n\t* color=" + color + ",\n\t* caracteristicas=" + caracteristicas;
+    }
+    
+    
 }

@@ -8,11 +8,12 @@ import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Postulacion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import java.io.Serializable;
-import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -134,4 +135,17 @@ public class PostulacionJpaController implements Serializable {
         }
     }
     
+    public List<Postulacion> findPostulacionesByPostulante(String postulante) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Postulacion> query = em.createQuery(
+                "SELECT p FROM Postulacion p WHERE p.postulante = :postulante",
+                Postulacion.class
+            );
+            query.setParameter("postulante", postulante);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

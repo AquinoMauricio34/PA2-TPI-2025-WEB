@@ -4,12 +4,14 @@
  */
 package com.mycompany.tpi2025web.servlets;
 
+import com.google.zxing.WriterException;
 import com.mycompany.tpi2025web.DAOImpl.GatoJpaController;
 import com.mycompany.tpi2025web.DAOImpl.ZonaJpaController;
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Gato;
 import com.mycompany.tpi2025web.model.Zona;
 import com.mycompany.tpi2025web.model.enums.EstadoSalud;
+import com.mycompany.tpi2025web.utils.QRUtils;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author aquin
  */
-@WebServlet(name = "SvGato", urlPatterns = {"/SvGato/cargar_alta", "/SvGato/listar", "/SvGato/crear", "/SvGato/editar", "/SvGato/cargar_editar", "/SvGato/eliminar"})
+@WebServlet(name = "SvGato", urlPatterns = {"/SvGato/cargar_gatos_postular","/SvGato/postularse","/SvGato/ver_qr", "/SvGato/cargar_alta", "/SvGato/listar", "/SvGato/crear", "/SvGato/editar", "/SvGato/cargar_editar", "/SvGato/eliminar"})
 public class SvGato extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -43,6 +45,8 @@ public class SvGato extends HttpServlet {
             cargarAlta(request, response);
         } else if (uri.endsWith("/listar")) {
             listar(request, response);
+        } else if (uri.endsWith("/ver_qr")) {
+            mostrarQR(request, response);
         }
 
     }
@@ -93,15 +97,16 @@ public class SvGato extends HttpServlet {
         g.setZona(z);
 
         try {
-
             daoG.create(g);
-            System.out.println("Gato id: " + g.toString());
             g.setQr("QR" + g.getId());
+            //g.setQr(QRUtils.generarQRBase64(g.toString()));
 
             daoG.edit(g);
+            System.out.println("svgato crear try 4");
 
         } catch (Exception ex) {
             Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
 
         response.sendRedirect(request.getContextPath() + "/SvGato/cargar_alta");
@@ -120,7 +125,6 @@ public class SvGato extends HttpServlet {
 
         Zona z = daoZ.findZona(Long.parseLong(request.getParameter("zonaId")));
         g.setZona(z);
-        
 
         try {
             dao.edit(g);
@@ -136,7 +140,7 @@ public class SvGato extends HttpServlet {
         ZonaJpaController daoZ = new ZonaJpaController((EntityManagerFactory) getServletContext().getAttribute("emf"));
         Gato gatoEditar = dao.findGato(Long.parseLong(request.getParameter("gato")));
         request.setAttribute("gatoEditar", gatoEditar);
-        
+
         // para tener la lista de zonas
         List<Zona> zonas = daoZ.findZonaEntities();
         request.setAttribute("listaZonas", zonas);
@@ -154,14 +158,14 @@ public class SvGato extends HttpServlet {
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
         long idGato = Long.parseLong(request.getParameter("gato"));
 
-        GatoJpaController dao =
-            new GatoJpaController(
-                (EntityManagerFactory) request.getServletContext().getAttribute("emf")
-            );
-        
+        GatoJpaController dao
+                = new GatoJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
         try {
             dao.destroy(idGato);
-            response.sendRedirect(request.getContextPath()+"/SvGato/listar");
+            response.sendRedirect(request.getContextPath() + "/SvGato/listar");
         } catch (IOException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
@@ -182,4 +186,23 @@ public class SvGato extends HttpServlet {
         request.getRequestDispatcher("/layout.jsp").forward(request, response);
     }
 
+    private void mostrarQR(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String textoQR = request.getParameter("gatoToString");
+
+        
+
+        String qrBase64=null;
+        try {
+            qrBase64 = QRUtils.generarQRBase64(textoQR);
+        } catch (WriterException ex) {
+            Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        request.setAttribute("qrBase64", qrBase64);
+
+        request.getRequestDispatcher("/SvGato/listar").forward(request, response);
+
+    }
 }

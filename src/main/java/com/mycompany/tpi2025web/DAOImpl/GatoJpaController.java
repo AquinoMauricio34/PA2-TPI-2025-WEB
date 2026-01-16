@@ -8,11 +8,11 @@ import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Gato;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import java.io.Serializable;
-import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,6 +28,20 @@ public class GatoJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public long countByZonaId(Long zonaId) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(g) FROM Gato g WHERE g.zona.id = :zonaId",
+                    Long.class
+            )
+                    .setParameter("zonaId", zonaId)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
     }
 
     public void create(Gato gato) {
@@ -133,5 +147,5 @@ public class GatoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

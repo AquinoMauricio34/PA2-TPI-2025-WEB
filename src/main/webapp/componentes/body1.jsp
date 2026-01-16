@@ -147,6 +147,9 @@
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvGato/cargar_alta">Crear</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvGato/listar">Ver</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvHistorial/seleccionar_gato?direccion=/SvHistorial/mostrar_historial">Historial</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/cargar_usuarios_emision">Emision Aptitud</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_gatos_postular">Postularse</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_mis_postulaciones">Mis Postulaciones</a>
                     </div>
                 </div>
             </li>
@@ -161,7 +164,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=mapa.jsp">Aniadir</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvZona/cargar_aniadir">Aniadir</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvZona/listar">Ver</a>
                     </div>
                 </div>

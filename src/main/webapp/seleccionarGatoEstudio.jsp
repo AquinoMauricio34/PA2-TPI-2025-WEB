@@ -34,7 +34,7 @@
                                 <td style="display: flex; width: 230px;">
 
                                     <!-- SELECCIONAR -->
-                                    <form action="${pageContext.request.contextPath}/SvVisita/mostrar_campos" method="GET">
+                                    <form action="${pageContext.request.contextPath}/SvEstudio/mostrar_campos" method="GET">
                                         <input type="hidden" name="gato" value="${u.id}">
                                         <button type="submit"
                                             class="btn btn-primary btn-user btn-block"

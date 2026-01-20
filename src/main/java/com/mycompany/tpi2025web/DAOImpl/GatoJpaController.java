@@ -6,6 +6,7 @@ package com.mycompany.tpi2025web.DAOImpl;
 
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Gato;
+import com.mycompany.tpi2025web.model.enums.EstadoSalud;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
@@ -164,6 +165,36 @@ public class GatoJpaController implements Serializable {
                         Gato.class
                 ).getResultList();
             }
+        } finally {
+            em.close();
+        }
+    }
+
+    public Long contarGatosEsterilizados() {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(g) "
+                    + "FROM Gato g "
+                    + "WHERE g.estadoSalud = :estado",
+                    Long.class
+            )
+                    .setParameter("estado", EstadoSalud.ESTERILIZADO)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Long contarGatosAdoptados() {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(g) "
+                    + "FROM Gato g "
+                    + "WHERE g.usuario IS NOT NULL",
+                    Long.class
+            ).getSingleResult();
         } finally {
             em.close();
         }

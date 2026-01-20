@@ -1,9 +1,3 @@
-<%-- 
-    Document   : body1
-    Created on : 2 dic 2025, 1:19:39 p. m.
-    Author     : aquin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <body id="page-top">
     
@@ -63,7 +57,7 @@
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Administrador">Crear</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Administrador">Ver</a>
-                        <a class="collapse-item" href="#">Reporte</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvReporte">Reporte</a>
                     </div>
                 </div>
             </li>
@@ -154,6 +148,7 @@
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_mis_postulaciones">Mis Postulaciones</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/cargar_usuarios_aptos">Asignar gato</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvVisita/mostrar_gatos">Visita de Seguimiento</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvEstudio/mostrar_gatos">Visita de Seguimiento</a>
                     </div>
                 </div>
             </li>

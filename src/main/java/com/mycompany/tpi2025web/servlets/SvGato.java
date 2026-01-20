@@ -6,9 +6,15 @@ package com.mycompany.tpi2025web.servlets;
 
 import com.google.zxing.WriterException;
 import com.mycompany.tpi2025web.DAOImpl.GatoJpaController;
+import com.mycompany.tpi2025web.DAOImpl.PostulacionJpaController;
+import com.mycompany.tpi2025web.DAOImpl.UsuarioJpaController;
 import com.mycompany.tpi2025web.DAOImpl.ZonaJpaController;
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
+import com.mycompany.tpi2025web.model.Familia;
 import com.mycompany.tpi2025web.model.Gato;
+import com.mycompany.tpi2025web.model.Hogar;
+import com.mycompany.tpi2025web.model.Postulacion;
+import com.mycompany.tpi2025web.model.Usuario;
 import com.mycompany.tpi2025web.model.Zona;
 import com.mycompany.tpi2025web.model.enums.EstadoSalud;
 import com.mycompany.tpi2025web.utils.QRUtils;
@@ -27,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author aquin
  */
-@WebServlet(name = "SvGato", urlPatterns = {"/SvGato/cargar_gatos_postular","/SvGato/postularse","/SvGato/ver_qr", "/SvGato/cargar_alta", "/SvGato/listar", "/SvGato/crear", "/SvGato/editar", "/SvGato/cargar_editar", "/SvGato/eliminar"})
+@WebServlet(name = "SvGato", urlPatterns = {"/SvGato/adoptar_gato", "/SvGato/cargar_gatos_elegir", "/SvGato/cargar_gatos_postular", "/SvGato/postularse", "/SvGato/ver_qr", "/SvGato/cargar_alta", "/SvGato/listar", "/SvGato/crear", "/SvGato/editar", "/SvGato/cargar_editar", "/SvGato/eliminar"})
 public class SvGato extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -47,7 +53,10 @@ public class SvGato extends HttpServlet {
             listar(request, response);
         } else if (uri.endsWith("/ver_qr")) {
             mostrarQR(request, response);
+        } else if (uri.endsWith("/cargar_gatos_elegir")) {
+            cargarGatosEligir(request, response);
         }
+        System.out.println("svgata dogetfin");
 
     }
 
@@ -62,7 +71,10 @@ public class SvGato extends HttpServlet {
             editar(request, response);
         } else if (uri.endsWith("/eliminar")) {
             eliminar(request, response);
+        } else if (uri.endsWith("/adoptar_gato")) {
+            adoptarGato(request, response);
         }
+        System.out.println("svgata dopostfin");
 
     }
 
@@ -189,9 +201,7 @@ public class SvGato extends HttpServlet {
     private void mostrarQR(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String textoQR = request.getParameter("gatoToString");
 
-        
-
-        String qrBase64=null;
+        String qrBase64 = null;
         try {
             qrBase64 = QRUtils.generarQRBase64(textoQR);
         } catch (WriterException ex) {
@@ -205,4 +215,81 @@ public class SvGato extends HttpServlet {
         request.getRequestDispatcher("/SvGato/listar").forward(request, response);
 
     }
+
+    private void cargarGatosEligir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PostulacionJpaController daoP
+                = new PostulacionJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
+        List<Postulacion> listaPostulaciones = daoP.findPostulacionesByPostulante(request.getParameter("usuario"));
+        request.setAttribute("listaPostulaciones", listaPostulaciones);
+        request.setAttribute("contenido", "/verPostulacionAElegir.jsp");
+        System.out.println("svgato carggatoelegi");
+        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+    }
+
+    private void adoptarGato(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        EntityManagerFactory emf
+                = (EntityManagerFactory) request.getServletContext().getAttribute("emf");
+
+        PostulacionJpaController daoP = new PostulacionJpaController(emf);
+        GatoJpaController daoG = new GatoJpaController(emf);
+        UsuarioJpaController daoU = new UsuarioJpaController(emf);
+
+        Long postulacionId = Long.valueOf(request.getParameter("postulacionId"));
+
+        Postulacion pSel = daoP.findPostulacion(postulacionId);
+        if (pSel == null) {
+            throw new IllegalStateException("Postulación inexistente");
+        }
+
+        Gato gSel = daoG.findGato(pSel.getIdGato());
+        Usuario adoptante = daoU.findUsuario(pSel.getPostulante());
+
+        if (gSel == null || adoptante == null) {
+            throw new IllegalStateException("Datos inválidos");
+        }
+
+        if (gSel.getUsuario() != null) {
+            throw new IllegalStateException("El gato ya fue adoptado");
+        }
+
+        // ==========================
+        // ASIGNAR ADOPTANTE
+        // ==========================
+        gSel.setUsuario(adoptante);
+
+        if (adoptante instanceof Familia f) {
+            f.addGato(gSel);
+            f.setAptoAdopcion(false);
+        } else if (adoptante instanceof Hogar h) {
+            h.addGato(gSel);
+            h.setAptoAdopcion(false);
+        }
+
+        try {
+            // Persistir owning side
+            daoG.edit(gSel);
+            daoU.edit(adoptante);
+
+            // ==========================
+            // ELIMINAR TODAS LAS POSTULACIONES DEL GATO
+            // ==========================
+            List<Postulacion> postulaciones
+                    = daoP.findPostulacionesPorGato(gSel.getId());
+
+            for (Postulacion p : postulaciones) {
+                daoP.destroy(p.getId());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al adoptar gato", e);
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/SvUsuario/cargar_usuarios_aptos");
+        
+    }
+
 }

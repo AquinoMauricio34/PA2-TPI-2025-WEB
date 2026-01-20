@@ -53,19 +53,19 @@
                     required>
                 
                 <option value="ENFERMO" 
-                    ${gato.estadoSalud eq 'ENFERMO' ? 'selected' : ''}>
+                    ${g.estadoSalud eq 'ENFERMO' ? 'selected' : ''}>
                     ENFERMO
                 </option>
                 <option value="SANO" 
-                    ${gato.estadoSalud eq 'SANO' ? 'selected' : ''}>
+                    ${g.estadoSalud eq 'SANO' ? 'selected' : ''}>
                     SANO
                 </option>
                 <option value="EN_TRATAMIENTO" 
-                    ${gato.estadoSalud eq 'EN_TRATAMIENTO' ? 'selected' : ''}>
+                    ${g.estadoSalud eq 'EN_TRATAMIENTO' ? 'selected' : ''}>
                     EN TRATAMIENTO
                 </option>
                 <option value="ESTERILIZADO" 
-                    ${gato.estadoSalud eq 'ESTERILIZADO' ? 'selected' : ''}>
+                    ${g.estadoSalud eq 'ESTERILIZADO' ? 'selected' : ''}>
                     ESTERILIZADO
                 </option>
             </select>

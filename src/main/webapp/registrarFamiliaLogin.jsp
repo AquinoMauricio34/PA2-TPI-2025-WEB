@@ -1,4 +1,3 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -40,26 +39,48 @@
                                 <div>
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Ingreso</h1>
+                                            <h1 class="h4 text-gray-900 mb-4">Registro de Familia</h1>
                                         </div>
-                                        <form class="user" action="SvLogin/login" method="POST">
+                                        <form class="user" action="SvLogin/registrar_familia" method="POST">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control form-control-user"
+                                                       id="nombre" name="nombre" aria-describedby="usuarioHelp"
+                                                       placeholder="Nombre de Familia" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control form-control-user"
+                                                       id="telefono" name="telefono" aria-describedby="usuarioHelp"
+                                                       placeholder="Telefono" required>
+                                            </div>
+                                            
                                             <div class="form-group">
                                                 <input type="text" class="form-control form-control-user"
                                                        id="nombreUsuario" name="nombreUsuario" aria-describedby="usuarioHelp"
-                                                    placeholder="Nombre de usuario" required>
+                                                       placeholder="Nombre de usuario" required>
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" class="form-control form-control-user"
                                                        id="contrasenia" name="contrasenia" placeholder="Contrasenia" required>
                                             </div>
-                                            
-                                            <button class="btn btn-primary btn-user btn-block" type="submit">
-                                                Login
-                                            </button>
-                                            <hr>
-                                            <a href="${pageContext.request.contextPath}/registrarFamiliaLogin.jsp" class="btn btn-secondary btn-block">
-                                                Registrar Familia
-                                            </a>
+
+                                            <div class="form-group row">
+                                                <div class="col-sm-6 mb-3">
+                                                    <a class="btn btn-secondary btn-user w-100 text-nowrap"accordion
+                                                       href="${pageContext.request.contextPath}/login.jsp">
+                                                        Cancelar
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-sm-6 mb-3">
+                                                    <button type="submit"
+                                                            class="btn btn-primary btn-user w-100 text-nowrap">
+                                                        Crear Usuario
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+
                                         </form>
                                     </div>
                                 </div>

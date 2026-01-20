@@ -4,10 +4,10 @@
  */
 package com.mycompany.tpi2025web.servlets;
 
-import com.mycompany.tpi2025web.DAOImpl.FamiliaJpaController;
-import com.mycompany.tpi2025web.DAOImpl.UsuarioJpaController;
-import com.mycompany.tpi2025web.model.Familia;
-import com.mycompany.tpi2025web.model.Usuario;
+import com.mycompany.tpi2025web.DAOImpl.GatoJpaController;
+import com.mycompany.tpi2025web.DAOImpl.VisitaSeguimientoJpaController;
+import com.mycompany.tpi2025web.model.Gato;
+import com.mycompany.tpi2025web.model.VisitaSeguimiento;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,8 +22,8 @@ import java.util.List;
  *
  * @author aquin
  */
-@WebServlet(name = "SvLogin", urlPatterns = {"/SvLogin/login", "/SvLogin/logout", "/SvLogin/registrar_familia"})
-public class SvLogin extends HttpServlet {
+@WebServlet(name = "SvVisita", urlPatterns = {"/SvVisita/mostrar_campos","/SvVisita/crear_visita","/SvVisita/mostrar_gatos"})
+public class SvVisita extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,7 +36,7 @@ public class SvLogin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -51,14 +51,13 @@ public class SvLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false); // NO crea sesión nueva
+        String uri = request.getRequestURI();
 
-        if (session != null) {
-            session.invalidate(); // 🔥 mata la sesión
+        if (uri.endsWith("/mostrar_campos")) {
+            mostrarCampos(request, response);
+        } else if (uri.endsWith("/mostrar_gatos")) {
+            mostrarGatos(request, response);
         }
-
-        // Redirigir al login
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
     }
 
     /**
@@ -74,12 +73,9 @@ public class SvLogin extends HttpServlet {
             throws ServletException, IOException {
         String uri = request.getRequestURI();
 
-        if (uri.endsWith("/login")) {
-            login(request, response);
-        } else if (uri.endsWith("/registrar_familia")) {
-            registrarFamilia(request, response);
+        if (uri.endsWith("/crear_visita")) {
+            crearVisita(request, response);
         }
-
     }
 
     /**
@@ -92,33 +88,38 @@ public class SvLogin extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        List<Usuario> listaUsuario = dao.findUsuarioEntities();
-        String nombreUsuario = request.getParameter("nombreUsuario");
-        String contrasenia = request.getParameter("contrasenia");
-        boolean validacion = listaUsuario.stream().anyMatch(u -> u.getNombreUsuario().equals(nombreUsuario) && u.getContrasena().equals(contrasenia));
-        if (validacion) {
-            HttpSession s = request.getSession(true);
-            s.setAttribute("usuario", nombreUsuario);
-            //response.sendRedirect("index.jsp");
-            response.sendRedirect(
-                    request.getContextPath() + "/SvPanel?vista=index.jsp"
-            );
-        } else {
-            response.sendRedirect("login.jsp");
-        }
-    }
-
-    private void registrarFamilia(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        FamiliaJpaController dao = new FamiliaJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        Familia nuevaFamilia = new Familia(request.getParameter("nombre"), request.getParameter("contrasenia"), request.getParameter("telefono"), request.getParameter("nombreUsuario"));
+    private void crearVisita(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        VisitaSeguimientoJpaController dao
+                = new VisitaSeguimientoJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+        HttpSession s = request.getSession(false);
+        VisitaSeguimiento visita = new VisitaSeguimiento(String.valueOf(s.getAttribute("usuario")), Long.parseLong(request.getParameter("gatoId")), request.getParameter("fecha"), request.getParameter("descripcion"));
         try {
-            dao.create(nuevaFamilia);
+            dao.create(visita);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/SvVisita/mostrar_gatos");
+    }
+
+    private void mostrarCampos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("gatoId", request.getParameter("gato"));
+        request.setAttribute("contenido", "/registrarVisitaSeguimiento.jsp");
+        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+    }
+
+    private void mostrarGatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        GatoJpaController dao
+                = new GatoJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
+        List<Gato> listaGatos = dao.findGatosByAdoptado(true);
+
+        request.setAttribute("listaGatos", listaGatos);
+        request.setAttribute("contenido", "/seleccionarGatoVisita.jsp");
+        request.getRequestDispatcher("/layout.jsp").forward(request, response);
     }
 
 }

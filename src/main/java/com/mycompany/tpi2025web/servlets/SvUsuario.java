@@ -28,8 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-@WebServlet(name = "SvUsuario", urlPatterns = {"/SvUsuario/cambiar_estado", "/SvUsuario/cargar_usuarios_emision", "/SvUsuario/crear", "/SvUsuario/cargar_editar", "/SvUsuario/editar", "/SvUsuario/eliminar", "/SvUsuario/listar"})
+@WebServlet(name = "SvUsuario", urlPatterns = {"/SvUsuario/cargar_usuarios_aptos","/SvUsuario/cambiar_estado", "/SvUsuario/cargar_usuarios_emision", "/SvUsuario/crear", "/SvUsuario/cargar_editar", "/SvUsuario/editar", "/SvUsuario/eliminar", "/SvUsuario/listar"})
 public class SvUsuario extends HttpServlet {
 
     private static final Map<String, Class<? extends Usuario>> TIPOS = Map.of(
@@ -56,6 +57,8 @@ public class SvUsuario extends HttpServlet {
             carga_editar(request, response);
         } else if (uri.endsWith("/cargar_usuarios_emision")) {
             cargarEmision(request, response);
+        } else if (uri.endsWith("/cargar_usuarios_aptos")) {
+            cargarUsuariosAptos(request, response);
         }
         System.out.println("svusu doGet fin");
     }
@@ -237,18 +240,14 @@ public class SvUsuario extends HttpServlet {
     }
 
     private void cargarEmision(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("svusu cagaremi 1");
         FamiliaJpaController daoF = new FamiliaJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         HogarJpaController daoH = new HogarJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
 
-        System.out.println("svusu cagaremi 2");
         List<Usuario> listaUsuarios = new ArrayList<>();
         listaUsuarios.addAll(daoF.findFamiliaEntities());
         listaUsuarios.addAll(daoH.findHogarEntities());
-        System.out.println("len: " + listaUsuarios.size());
         request.setAttribute("listaUsuarios", listaUsuarios);
         request.setAttribute("contenido", "/aptitudUsuarios.jsp");
-        System.out.println("svusu cagaremi 3");
         request.getRequestDispatcher("/layout.jsp").forward(request, response);
 
     }
@@ -277,6 +276,18 @@ public class SvUsuario extends HttpServlet {
         
         
         response.sendRedirect(request.getContextPath()+"/SvUsuario/cargar_usuarios_emision");
+    }
+
+    private void cargarUsuariosAptos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        FamiliaJpaController daoF = new FamiliaJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+        HogarJpaController daoH = new HogarJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+
+        List<Usuario> listaUsuarios = new ArrayList<>();
+        listaUsuarios.addAll(daoF.findFamiliaEntities().stream().filter(e -> e.isAptoAdopcion()).collect(Collectors.toList()));
+        listaUsuarios.addAll(daoH.findHogarEntities().stream().filter(e -> e.isAptoAdopcion()).collect(Collectors.toList()));
+        request.setAttribute("listaUsuarios", listaUsuarios);
+        request.setAttribute("contenido", "/verAptosAdopcion.jsp");
+        request.getRequestDispatcher("/layout.jsp").forward(request, response);
     }
 
 }

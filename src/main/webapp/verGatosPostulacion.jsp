@@ -4,14 +4,18 @@
     <div class="card shadow mb-4">
 
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Gato</h3>
+            <h3 class="m-0 font-weight-bold text-primary">Gatos para postularse</h3>
+            <c:if test="${not empty error}">
+                <br>
+                <h5 class="m-0 font-weight-bold text-danger">${error}</h5>
+            </c:if>
         </div>
 
         <div class="card-body">
             <div class="table-responsive">
 
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    
+
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -35,10 +39,14 @@
                                     <form action="${pageContext.request.contextPath}/SvPostulacion/postularse" method="POST">
                                         <input type="hidden" name="gato" value="${u.id}">
                                         <button type="submit"
-                                            class="btn btn-secondary btn-user btn-block"
-                                            style="margin-right: 5px;">
-                                            <i class="fas fa-trash-alt"></i> Postularse
+                                                class="btn btn-user btn-block
+                                                ${error != null ? 'disabled' : 'btn-primary'}"
+                                                style="margin-right: 5px;"
+                                                ${error != null ? 'disabled' : ''}>
+                                            <i class="fas fa-hand"></i> Postularse
                                         </button>
+
+
                                     </form>
 
                                 </td>
@@ -52,29 +60,3 @@
         </div>
     </div>
 </div>
-<c:if test="${not empty error}">
-    <div class="modal fade show" id="modalError" tabindex="-1"
-         style="display:block; background: rgba(0,0,0,0.5);">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Error</h5>
-                    
-                </div>
-
-                <div class="modal-body">
-                    <p>${error}</p>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary"
-                            onclick="document.getElementById('modalError').style.display = 'none'">
-                        Cerrar
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</c:if>

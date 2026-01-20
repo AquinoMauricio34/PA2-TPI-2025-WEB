@@ -65,9 +65,7 @@
             </div>
         </form>
 
-        <!-- ============================= -->
         <!-- PASAR ZONAS A JAVASCRIPT -->
-        <!-- ============================= -->
         <script>
             var zonas = [
             <c:forEach var="z" items="${listaZonas}" varStatus="st">
@@ -81,9 +79,7 @@
             var zonaFocusId = "${zonaFocusId}";
         </script>
 
-        <!-- ============================= -->
         <!-- MAPA -->
-        <!-- ============================= -->
         <script>
             var map = L.map('map').setView([-27.3827, -55.9197], 12);
 
@@ -94,9 +90,7 @@
             var bounds = [];
             var markersPorId = {};
 
-            // =============================
             // Dibujar zonas existentes
-            // =============================
             zonas.forEach(function (z) {
 
                 var partes = z.localizacion.split(" / ");
@@ -125,9 +119,7 @@
                 map.fitBounds(bounds);
             }
 
-            // =============================
             // FLY TO POR ID
-            // =============================
             if (zonaFocusId && markersPorId[zonaFocusId]) {
                 var m = markersPorId[zonaFocusId];
 
@@ -140,9 +132,7 @@
                 m.openPopup();
             }
 
-            // =============================
             // Marker nuevo
-            // =============================
             var markerNuevo = null;
 
             map.on('click', function (e) {

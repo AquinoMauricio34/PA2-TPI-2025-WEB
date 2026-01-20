@@ -74,8 +74,25 @@ public class SvPostulacion extends HttpServlet {
                 = new PostulacionJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
-
+//        UsuarioJpaController daoU
+//                    = new UsuarioJpaController(
+//                            (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+//                    );
         HttpSession s = request.getSession(false);
+        
+//        Usuario usuario = daoU.findUsuario(String.valueOf(s.getAttribute("usuario")));
+//        switch (usuario) {
+//            case Familia f -> f.setAptoAdopcion(false);
+//            case Hogar h -> h.setAptoAdopcion(false);
+//            default -> throw new AssertionError();
+//        }
+//        
+//        try {
+//            daoU.edit(usuario);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        
         Postulacion post = new Postulacion(String.valueOf(s.getAttribute("usuario")), Long.valueOf(request.getParameter("gato")));
         try {
             dao.create(post);
@@ -134,7 +151,7 @@ public class SvPostulacion extends HttpServlet {
                     || (usuarioActual instanceof Hogar hogar && !hogar.isAptoAdopcion());
 
             if (esNoApto) {
-                request.setAttribute("error", "El usuario no es apto para adoptar.");
+                request.setAttribute("error", "El usuario no es apto para adoptar");
             }
         } catch (Exception e) {
             request.setAttribute(

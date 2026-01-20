@@ -67,6 +67,7 @@
                     </div>
                 </div>
             </li>
+            <!-- Sección Voluntario -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVoluntarios"
                     aria-expanded="true" aria-controls="collapseVoluntarios">
@@ -79,6 +80,7 @@
                         <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Voluntario">Crear</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Voluntario">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=registrarTareaRealizada.jsp">Tarea Realizada</a>
                     </div>
                 </div>
             </li>
@@ -150,6 +152,8 @@
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/cargar_usuarios_emision">Emision Aptitud</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_gatos_postular">Postularse</a>
                         <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_mis_postulaciones">Mis Postulaciones</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/cargar_usuarios_aptos">Asignar gato</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvVisita/mostrar_gatos">Visita de Seguimiento</a>
                     </div>
                 </div>
             </li>
@@ -206,20 +210,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <button class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <button class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </button>

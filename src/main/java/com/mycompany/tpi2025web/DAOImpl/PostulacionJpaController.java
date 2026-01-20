@@ -134,13 +134,13 @@ public class PostulacionJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<Postulacion> findPostulacionesByPostulante(String postulante) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Postulacion> query = em.createQuery(
-                "SELECT p FROM Postulacion p WHERE p.postulante = :postulante",
-                Postulacion.class
+                    "SELECT p FROM Postulacion p WHERE p.postulante = :postulante",
+                    Postulacion.class
             );
             query.setParameter("postulante", postulante);
             return query.getResultList();
@@ -148,4 +148,18 @@ public class PostulacionJpaController implements Serializable {
             em.close();
         }
     }
+
+    public List<Postulacion> findPostulacionesPorGato(Long idGato) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT p FROM Postulacion p WHERE p.idGato = :idGato",
+                    Postulacion.class
+            ).setParameter("idGato", idGato)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }

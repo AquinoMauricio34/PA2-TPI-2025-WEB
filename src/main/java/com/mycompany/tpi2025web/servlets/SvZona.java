@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author aquin
  */
-@WebServlet(name = "SvZona", urlPatterns = {"/SvZona/cargar_aniadir", "/SvZona/crear", "/SvZona/listar", "/SvZona/eliminar"})
+@WebServlet(name = "SvZona", urlPatterns = {"/privado/SvZona/cargar_aniadir", "/privado/SvZona/crear", "/privado/SvZona/listar", "/privado/SvZona/eliminar"})
 public class SvZona extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -82,7 +82,7 @@ public class SvZona extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect(request.getContextPath() + "/SvZona/cargar_aniadir");
+        response.sendRedirect(request.getContextPath() + "/privado/SvZona/cargar_aniadir");
     }
 
     private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -99,8 +99,8 @@ public class SvZona extends HttpServlet {
         }
 
         request.setAttribute("listaZonas", listaMostrar);
-        request.setAttribute("contenido", "/verZonas.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/verZonas.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -137,7 +137,7 @@ public class SvZona extends HttpServlet {
         }
 
         
-        request.getRequestDispatcher("/SvZona/listar").forward(request, response);
+        request.getRequestDispatcher("/privado/SvZona/listar").forward(request, response);
 
     }
 
@@ -151,9 +151,9 @@ public class SvZona extends HttpServlet {
         System.out.println("zonafocus: " + request.getParameter("zonaFocusId"));
         request.setAttribute("zonaFocusId", request.getParameter("zonaFocusId"));
         request.setAttribute("listaZonas", listaZonas);
-        request.setAttribute("contenido", "/mapa.jsp");
+        request.setAttribute("contenido", "/privado/mapa.jsp");
         System.out.println("svzona cargaaniad 2");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
 }

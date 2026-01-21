@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author aquin
  */
-@WebServlet(name = "SvGato", urlPatterns = {"/SvGato/adoptar_gato", "/SvGato/cargar_gatos_elegir", "/SvGato/cargar_gatos_postular", "/SvGato/postularse", "/SvGato/ver_qr", "/SvGato/cargar_alta", "/SvGato/listar", "/SvGato/crear", "/SvGato/editar", "/SvGato/cargar_editar", "/SvGato/eliminar"})
+@WebServlet(name = "SvGato", urlPatterns = {"/privado/SvGato/adoptar_gato", "/privado/SvGato/cargar_gatos_elegir", "/privado/SvGato/cargar_gatos_postular", "/privado/SvGato/postularse", "/privado/SvGato/ver_qr", "/privado/SvGato/cargar_alta", "/privado/SvGato/listar", "/privado/SvGato/crear", "/privado/SvGato/editar", "/privado/SvGato/cargar_editar", "/privado/SvGato/eliminar"})
 public class SvGato extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -89,8 +89,8 @@ public class SvGato extends HttpServlet {
         List<Zona> zonas = dao.findZonaEntities();
         request.setAttribute("listaZonas", zonas);
 
-        request.setAttribute("contenido", "/altaGato.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/altaGato.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void crear(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -121,7 +121,7 @@ public class SvGato extends HttpServlet {
             ex.printStackTrace();
         }
 
-        response.sendRedirect(request.getContextPath() + "/SvGato/cargar_alta");
+        response.sendRedirect(request.getContextPath() + "/privado/SvGato/cargar_alta");
 
     }
 
@@ -140,7 +140,7 @@ public class SvGato extends HttpServlet {
 
         try {
             dao.edit(g);
-            response.sendRedirect(request.getContextPath() + "/SvGato/listar");
+            response.sendRedirect(request.getContextPath() + "/privado/SvGato/listar");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -156,10 +156,10 @@ public class SvGato extends HttpServlet {
         // para tener la lista de zonas
         List<Zona> zonas = daoZ.findZonaEntities();
         request.setAttribute("listaZonas", zonas);
-        request.setAttribute("contenido", "/editarGato.jsp");
+        request.setAttribute("contenido", "/privado/editarGato.jsp");
 
         try {
-            request.getRequestDispatcher("/layout.jsp").forward(request, response);
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         } catch (ServletException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -177,7 +177,7 @@ public class SvGato extends HttpServlet {
 
         try {
             dao.destroy(idGato);
-            response.sendRedirect(request.getContextPath() + "/SvGato/listar");
+            response.sendRedirect(request.getContextPath() + "/privado/SvGato/listar");
         } catch (IOException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
@@ -194,8 +194,8 @@ public class SvGato extends HttpServlet {
         List<Gato> listaGatos = dao.findGatoEntities();
 
         request.setAttribute("listaGatos", listaGatos);
-        request.setAttribute("contenido", "/verGatos.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/verGatos.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void mostrarQR(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -212,7 +212,7 @@ public class SvGato extends HttpServlet {
 
         request.setAttribute("qrBase64", qrBase64);
 
-        request.getRequestDispatcher("/SvGato/listar").forward(request, response);
+        request.getRequestDispatcher("/privado/SvGato/listar").forward(request, response);
 
     }
 
@@ -224,9 +224,9 @@ public class SvGato extends HttpServlet {
 
         List<Postulacion> listaPostulaciones = daoP.findPostulacionesByPostulante(request.getParameter("usuario"));
         request.setAttribute("listaPostulaciones", listaPostulaciones);
-        request.setAttribute("contenido", "/verPostulacionAElegir.jsp");
+        request.setAttribute("contenido", "/privado/verPostulacionAElegir.jsp");
         System.out.println("svgato carggatoelegi");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void adoptarGato(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -288,7 +288,7 @@ public class SvGato extends HttpServlet {
             throw new RuntimeException("Error al adoptar gato", e);
         }
         
-        response.sendRedirect(request.getContextPath() + "/SvUsuario/cargar_usuarios_aptos");
+        response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/cargar_usuarios_aptos");
         
     }
 

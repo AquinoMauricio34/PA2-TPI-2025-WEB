@@ -1,9 +1,3 @@
-<%-- 
-    Document   : header
-    Created on : 2 dic 2025, 1:19:30 p. m.
-    Author     : aquin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">

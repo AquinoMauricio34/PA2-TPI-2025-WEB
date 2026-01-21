@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  * @author aquin
  */
-@WebServlet(name = "SvHistorial", urlPatterns = {"/SvHistorial/mostrar_historial","/SvHistorial/seleccionar_gato"})
+@WebServlet(name = "SvHistorial", urlPatterns = {"/privado/SvHistorial/mostrar_historial","/privado/SvHistorial/seleccionar_gato"})
 public class SvHistorial extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -80,16 +80,16 @@ public class SvHistorial extends HttpServlet {
         System.out.println("H: "+gato.getHistorial().getId()+"-".repeat(20));
         //request.setAttribute("gatoId", gato.getId());
         
-        request.getRequestDispatcher("/SvDiagnostico/listar").forward(request, response);
+        request.getRequestDispatcher("/privado/SvDiagnostico/listar").forward(request, response);
         
     }
 
     private void seleccionarGato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         request.setAttribute("listaGatos", daoG.findGatoEntities());
-        request.setAttribute("contenido", "/seleccionarGato.jsp");
+        request.setAttribute("contenido", "/privado/seleccionarGato.jsp");
         request.setAttribute("direccion", request.getParameter("direccion"));
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
     
 }

@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author aquin
  */
-@WebServlet(name = "SvReporte", urlPatterns = {"/SvReporte"})
+@WebServlet(name = "SvReporte", urlPatterns = {"/privado/SvReporte"})
 public class SvReporte extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -66,8 +66,8 @@ public class SvReporte extends HttpServlet {
         request.setAttribute("listaZonas", listaMostrar);
         request.setAttribute("gatosEsterilizados", daoG.contarGatosEsterilizados());
         request.setAttribute("gatosAdoptados", daoG.contarGatosAdoptados());
-        request.setAttribute("contenido", "/reporte.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/reporte.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     @Override

@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  *
  * @author aquin
  */
-@WebServlet(name = "SvDiagnostico", urlPatterns = {"/SvDiagnostico","/SvDiagnostico/eliminar_tratamiento","/SvDiagnostico/llamar_mostrarDiagnostico","/SvDiagnostico/crear","/SvDiagnostico/listar","/SvDiagnostico/editar","/SvDiagnostico/cargar_editar","/SvDiagnostico/eliminar","/SvDiagnostico/llamar_altaTratamiento"})
+@WebServlet(name = "SvDiagnostico", urlPatterns = {"/privado/SvDiagnostico","/privado/SvDiagnostico/eliminar_tratamiento","/privado/SvDiagnostico/llamar_mostrarDiagnostico","/privado/SvDiagnostico/crear","/privado/SvDiagnostico/listar","/privado/SvDiagnostico/editar","/privado/SvDiagnostico/cargar_editar","/privado/SvDiagnostico/eliminar","/privado/SvDiagnostico/llamar_altaTratamiento"})
 public class SvDiagnostico extends HttpServlet {
 
     
@@ -98,9 +98,9 @@ public class SvDiagnostico extends HttpServlet {
         List<Diagnostico> listaDiagnosticos = daoD.obtenerPorHistorial(daoG.findGato(Long.parseLong(request.getParameter("gato"))).getHistorial().getId());
         request.setAttribute("listaDiagnosticos", listaDiagnosticos);
         request.setAttribute("gato", request.getParameter("gato"));
-        request.setAttribute("contenido", "/verDiagnosticos.jsp");
+        request.setAttribute("contenido", "/privado/verDiagnosticos.jsp");
         System.out.println("YAAAAAAAAAAAAAAAaa");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void crear(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -130,8 +130,8 @@ public class SvDiagnostico extends HttpServlet {
         
         session.removeAttribute("tratamientosTemp");
         //request.setAttribute("gato", g.getId());
-        //request.getRequestDispatcher("/SvHistorial/mostrar_historial").forward(request, response);
-        response.sendRedirect(request.getContextPath()+"/SvHistorial/mostrar_historial?gato="+g.getId());
+        //request.getRequestDispatcher("/privado/SvHistorial/mostrar_historial").forward(request, response);
+        response.sendRedirect(request.getContextPath()+"/privado/SvHistorial/mostrar_historial?gato="+g.getId());
         
     }
 
@@ -143,8 +143,8 @@ public class SvDiagnostico extends HttpServlet {
         request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
         System.out.println(request.getParameter("diagnosticoId")+"LN".repeat(120));
         System.out.println(request.getParameter("vistaVolver")+"LN".repeat(120));
-        request.setAttribute("contenido", "/altaTratamiento.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/altaTratamiento.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void mostrarDiagnostico(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
@@ -154,8 +154,8 @@ public class SvDiagnostico extends HttpServlet {
         request.setAttribute("gatoId", request.getParameter("gato"));
         //request.setAttribute("accion", "crearDiagnosticoasf");
         //System.out.println(request.getAttribute("gatoId")+"L".repeat(120));
-        request.setAttribute("contenido", "/altaDiagnostico.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/altaDiagnostico.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void cargarEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -177,8 +177,8 @@ public class SvDiagnostico extends HttpServlet {
         session.setAttribute("tratamientosTemp", listaTratamientos);
         //para mostrar en la jsp
         request.setAttribute("listaTratamientos",listaTratamientos);
-        request.setAttribute("contenido", "/editarDiagnostico.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/editarDiagnostico.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
 //    private void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -234,8 +234,8 @@ public class SvDiagnostico extends HttpServlet {
 //        
 //        session.removeAttribute("tratamientosTemp");
 //        //request.setAttribute("gato", g.getId());
-//        //request.getRequestDispatcher("/SvHistorial/mostrar_historial").forward(request, response);
-//        response.sendRedirect(request.getContextPath()+"/SvHistorial/mostrar_historial?gato="+request.getParameter("gatoId"));
+//        //request.getRequestDispatcher("/privado/SvHistorial/mostrar_historial").forward(request, response);
+//        response.sendRedirect(request.getContextPath()+"/privado/SvHistorial/mostrar_historial?gato="+request.getParameter("gatoId"));
 //    }
     
 //    private void editar(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -296,7 +296,7 @@ public class SvDiagnostico extends HttpServlet {
 //        //se limpia session
 //        session.removeAttribute("tratamientosTemp");
 //
-//        response.sendRedirect(request.getContextPath()+ "/SvHistorial/mostrar_historial?gato="+ request.getParameter("gatoId"));
+//        response.sendRedirect(request.getContextPath()+ "/privado/SvHistorial/mostrar_historial?gato="+ request.getParameter("gatoId"));
 //    }
     
     private void editar(HttpServletRequest request, HttpServletResponse response)
@@ -359,7 +359,7 @@ public class SvDiagnostico extends HttpServlet {
 
         response.sendRedirect(
             request.getContextPath() +
-            "/SvHistorial/mostrar_historial?gato=" + gatoId
+            "/privado/SvHistorial/mostrar_historial?gato=" + gatoId
         );
     }
 
@@ -402,7 +402,7 @@ public class SvDiagnostico extends HttpServlet {
         if(request.getParameter("diagnosticoId")!=null) request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
         request.setAttribute("contenido",request.getParameter("vistaVolver"));
         System.out.println("svdiag elimtrat final");
-        request.getRequestDispatcher("/layout.jsp")
+        request.getRequestDispatcher("/privado/layout.jsp")
                .forward(request, response);
         
     }
@@ -447,7 +447,7 @@ public class SvDiagnostico extends HttpServlet {
         System.out.println("svtrat cargEdit abandonoTratamiento (t.getAbandono_tratamiento()): " + t.getAbandono_tratamiento());
         request.setAttribute("contenido","/editarTratamiento.jsp");
         System.out.println("svtrat cargEdit Vista volver: "+request.getParameter("vistaVolver"));
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         
             
     }

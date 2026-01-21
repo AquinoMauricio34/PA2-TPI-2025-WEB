@@ -6,13 +6,9 @@ package com.mycompany.tpi2025web.servlets;
 
 import com.mycompany.tpi2025web.DAOImpl.GatoJpaController;
 import com.mycompany.tpi2025web.DAOImpl.PostulacionJpaController;
-import com.mycompany.tpi2025web.DAOImpl.UsuarioJpaController;
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
-import com.mycompany.tpi2025web.model.Familia;
 import com.mycompany.tpi2025web.model.Gato;
-import com.mycompany.tpi2025web.model.Hogar;
 import com.mycompany.tpi2025web.model.Postulacion;
-import com.mycompany.tpi2025web.model.Usuario;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author aquin
  */
-@WebServlet(name = "SvPostulacion", urlPatterns = {"/SvPostulacion/eliminar_postulacion", "/SvPostulacion/cargar_mis_postulaciones", "/SvPostulacion", "/SvPostulacion/cargar_gatos_postular", "/SvPostulacion/postularse"})
+@WebServlet(name = "SvPostulacion", urlPatterns = {"/privado/SvPostulacion/eliminar_postulacion", "/privado/SvPostulacion/cargar_mis_postulaciones", "/privado/SvPostulacion", "/privado/SvPostulacion/cargar_gatos_postular", "/privado/SvPostulacion/postularse"})
 public class SvPostulacion extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -100,7 +96,7 @@ public class SvPostulacion extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect(request.getContextPath() + "/SvPostulacion/cargar_gatos_postular");
+        response.sendRedirect(request.getContextPath() + "/privado/SvPostulacion/cargar_gatos_postular");
 
     }
 
@@ -140,29 +136,12 @@ public class SvPostulacion extends HttpServlet {
 
             request.setAttribute("listaGatos", listaFiltrada);
 
-            UsuarioJpaController daoU
-                    = new UsuarioJpaController(
-                            (EntityManagerFactory) request.getServletContext().getAttribute("emf")
-                    );
-
-            Usuario usuarioActual = daoU.findUsuario(String.valueOf(s.getAttribute("usuario")));
-
-            boolean esNoApto = (usuarioActual instanceof Familia familia && !familia.isAptoAdopcion())
-                    || (usuarioActual instanceof Hogar hogar && !hogar.isAptoAdopcion());
-
-            if (esNoApto) {
-                request.setAttribute("error", "El usuario no es apto para adoptar");
-            }
         } catch (Exception e) {
-            request.setAttribute(
-                    "error",
-                    "No se inició sesión."
-            );
             e.printStackTrace();
         }
 
-        request.setAttribute("contenido", "/verGatosPostulacion.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/verGatosPostulacion.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void cargarMisPostulaciones(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -174,8 +153,8 @@ public class SvPostulacion extends HttpServlet {
         HttpSession s = request.getSession(false);
         List<Postulacion> listaPostulaciones = daoP.findPostulacionesByPostulante(String.valueOf(s.getAttribute("usuario")));
         request.setAttribute("listaPostulaciones", listaPostulaciones);
-        request.setAttribute("contenido", "/verMisPostulaciones.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/verMisPostulaciones.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void eliminarPostulacion(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -191,7 +170,7 @@ public class SvPostulacion extends HttpServlet {
             ex.printStackTrace();
         }
 
-        response.sendRedirect(request.getContextPath() + "/SvPostulacion/cargar_mis_postulaciones");
+        response.sendRedirect(request.getContextPath() + "/privado/SvPostulacion/cargar_mis_postulaciones");
 
     }
 

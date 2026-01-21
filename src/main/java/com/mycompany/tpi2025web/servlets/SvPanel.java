@@ -15,7 +15,7 @@ import java.io.IOException;
  *
  * @author aquin
  */
-@WebServlet(name = "SvPanel", urlPatterns = {"/SvPanel"})
+@WebServlet(name = "SvPanel", urlPatterns = {"/privado/SvPanel"})
 public class SvPanel extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +33,7 @@ public class SvPanel extends HttpServlet {
         }
 
         request.setAttribute("contenido", vista);
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     @Override

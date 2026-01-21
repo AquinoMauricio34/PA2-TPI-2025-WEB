@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author aquin
  */
-@WebServlet(name = "SvVisita", urlPatterns = {"/SvVisita/mostrar_campos","/SvVisita/crear_visita","/SvVisita/mostrar_gatos"})
+@WebServlet(name = "SvVisita", urlPatterns = {"/privado/SvVisita/mostrar_campos","/privado/SvVisita/crear_visita","/privado/SvVisita/mostrar_gatos"})
 public class SvVisita extends HttpServlet {
 
     /**
@@ -100,13 +100,13 @@ public class SvVisita extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        response.sendRedirect(request.getContextPath() + "/SvVisita/mostrar_gatos");
+        response.sendRedirect(request.getContextPath() + "/privado/SvVisita/mostrar_gatos");
     }
 
     private void mostrarCampos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("gatoId", request.getParameter("gato"));
-        request.setAttribute("contenido", "/registrarVisitaSeguimiento.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/registrarVisitaSeguimiento.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void mostrarGatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -118,8 +118,8 @@ public class SvVisita extends HttpServlet {
         List<Gato> listaGatos = dao.findGatosByAdoptado(true);
 
         request.setAttribute("listaGatos", listaGatos);
-        request.setAttribute("contenido", "/seleccionarGatoVisita.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/seleccionarGatoVisita.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
 }

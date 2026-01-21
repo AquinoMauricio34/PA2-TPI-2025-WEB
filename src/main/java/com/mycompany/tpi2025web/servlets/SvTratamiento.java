@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author aquin
  */
-@WebServlet(name = "SvTratamiento", urlPatterns = {"/SvTratamiento/crear","/SvTratamiento/eliminar","/SvTratamiento/cargar_editar","/SvTratamiento/editar"})
+@WebServlet(name = "SvTratamiento", urlPatterns = {"/privado/SvTratamiento/crear","/privado/SvTratamiento/eliminar","/privado/SvTratamiento/cargar_editar","/privado/SvTratamiento/editar"})
 public class SvTratamiento extends HttpServlet {
 
     
@@ -95,7 +95,7 @@ public class SvTratamiento extends HttpServlet {
         request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
         request.setAttribute("contenido",request.getParameter("vistaVolver"));
         System.out.println("Vista volver svtrat/crear: "+request.getParameter("vistaVolver"));
-        request.getRequestDispatcher("/layout.jsp")
+        request.getRequestDispatcher("/privado/layout.jsp")
                .forward(request, response);
     }
 
@@ -121,7 +121,7 @@ public class SvTratamiento extends HttpServlet {
         request.setAttribute("abandonoTratamiento", t.getAbandono_tratamiento());
         request.setAttribute("contenido","/editarTratamiento.jsp");
         System.out.println("svtrat cargEdit Vista volver: "+request.getParameter("vistaVolver"));
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         
             
     }
@@ -159,7 +159,7 @@ public class SvTratamiento extends HttpServlet {
         request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
         request.setAttribute("contenido",request.getParameter("vistaVolver"));
         System.out.println("Vistavolver svtrat editar: "+request.getParameter("vistaVolver"));
-        request.getRequestDispatcher("/layout.jsp")
+        request.getRequestDispatcher("/privado/layout.jsp")
                .forward(request, response);
         
         

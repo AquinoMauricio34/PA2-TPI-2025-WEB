@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "SvUsuario", urlPatterns = {"/SvUsuario/cargar_usuarios_aptos","/SvUsuario/cambiar_estado", "/SvUsuario/cargar_usuarios_emision", "/SvUsuario/crear", "/SvUsuario/cargar_editar", "/SvUsuario/editar", "/SvUsuario/eliminar", "/SvUsuario/listar"})
+@WebServlet(name = "SvUsuario", urlPatterns = {"/privado/SvUsuario/cargar_usuarios_aptos","/privado/SvUsuario/cambiar_estado", "/privado/SvUsuario/cargar_usuarios_emision", "/privado/SvUsuario/crear", "/privado/SvUsuario/cargar_editar", "/privado/SvUsuario/editar", "/privado/SvUsuario/eliminar", "/privado/SvUsuario/listar"})
 public class SvUsuario extends HttpServlet {
 
     private static final Map<String, Class<? extends Usuario>> TIPOS = Map.of(
@@ -113,9 +113,9 @@ public class SvUsuario extends HttpServlet {
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         request.setAttribute("titulo", tipo);
-        request.setAttribute("contenido", "/verUsuarios.jsp");
+        request.setAttribute("contenido", "/privado/verUsuarios.jsp");
 
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
 
     }
 
@@ -131,7 +131,7 @@ public class SvUsuario extends HttpServlet {
         System.out.println(tipo + "--------------------------------------------------------------------------------------------------------");
         try {
             dao.destroy(usuario);
-            response.sendRedirect(request.getContextPath() + "/SvUsuario/listar?tipo=" + tipo);
+            response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/listar?tipo=" + tipo);
         } catch (IOException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
@@ -151,7 +151,7 @@ public class SvUsuario extends HttpServlet {
 
         try {
             dao.edit(usu);
-            response.sendRedirect(request.getContextPath() + "/SvUsuario/listar?tipo=" + usu.getTipoUsuario());
+            response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/listar?tipo=" + usu.getTipoUsuario());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -163,13 +163,13 @@ public class SvUsuario extends HttpServlet {
         Usuario usuarioEditar = dao.findUsuario(request.getParameter("usuario"));
         request.setAttribute("usuarioEditar", usuarioEditar);
         request.setAttribute("tipo", usuarioEditar.getTipoUsuario());
-        request.setAttribute("contenido", "/editarUsuario.jsp");
+        request.setAttribute("contenido", "/privado/editarUsuario.jsp");
 
         System.out.println(usuarioEditar);
 
         try {
             Logger.getLogger("a").log(Level.SEVERE, "AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa");
-            request.getRequestDispatcher("/layout.jsp").forward(request, response);
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         } catch (ServletException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -233,7 +233,7 @@ public class SvUsuario extends HttpServlet {
         }
 
         try {
-            response.sendRedirect(request.getContextPath() + "/SvPanel?vista=index.jsp");
+            response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=index.jsp");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -247,8 +247,8 @@ public class SvUsuario extends HttpServlet {
         listaUsuarios.addAll(daoF.findFamiliaEntities());
         listaUsuarios.addAll(daoH.findHogarEntities());
         request.setAttribute("listaUsuarios", listaUsuarios);
-        request.setAttribute("contenido", "/aptitudUsuarios.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/aptitudUsuarios.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
 
     }
 
@@ -275,7 +275,7 @@ public class SvUsuario extends HttpServlet {
         }
         
         
-        response.sendRedirect(request.getContextPath()+"/SvUsuario/cargar_usuarios_emision");
+        response.sendRedirect(request.getContextPath()+"/privado/SvUsuario/cargar_usuarios_emision");
     }
 
     private void cargarUsuariosAptos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -286,8 +286,8 @@ public class SvUsuario extends HttpServlet {
         listaUsuarios.addAll(daoF.findFamiliaEntities().stream().filter(e -> e.isAptoAdopcion()).collect(Collectors.toList()));
         listaUsuarios.addAll(daoH.findHogarEntities().stream().filter(e -> e.isAptoAdopcion()).collect(Collectors.toList()));
         request.setAttribute("listaUsuarios", listaUsuarios);
-        request.setAttribute("contenido", "/verAptosAdopcion.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/verAptosAdopcion.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
 }

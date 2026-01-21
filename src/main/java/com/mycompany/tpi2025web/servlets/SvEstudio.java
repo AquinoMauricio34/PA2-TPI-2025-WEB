@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author aquin
  */
-@WebServlet(name = "SvEstudio", urlPatterns = {"/SvEstudio","/SvEstudio/crear_estudio","/SvEstudio/mostrar_campos","/SvEstudio/mostrar_gatos"})
+@WebServlet(name = "SvEstudio", urlPatterns = {"/privado/SvEstudio","/privado/SvEstudio/crear_estudio","/privado/SvEstudio/mostrar_campos","/privado/SvEstudio/mostrar_gatos"})
 public class SvEstudio extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -66,15 +66,15 @@ public class SvEstudio extends HttpServlet {
         }
         
         //redireccion
-        response.sendRedirect(request.getContextPath()+"/SvEstudio/mostrar_gatos");
+        response.sendRedirect(request.getContextPath()+"/privado/SvEstudio/mostrar_gatos");
         
         
     }
 
     private void mostrarCampos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("gatoId", request.getParameter("gato"));
-        request.setAttribute("contenido", "/registrarEstudio.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/registrarEstudio.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
     private void mostrarGatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,7 +86,7 @@ public class SvEstudio extends HttpServlet {
         List<Gato> listaGatos = dao.findGatoEntities();
 
         request.setAttribute("listaGatos", listaGatos);
-        request.setAttribute("contenido", "/seleccionarGatoEstudio.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/seleccionarGatoEstudio.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 }

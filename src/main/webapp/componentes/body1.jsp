@@ -2,15 +2,6 @@
 <body id="page-top">
     
     
-    <%
-        /*
-        HttpSession s = request.getSession(false);
-        if (s == null || s.getAttribute("usuario") == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-        */
-    %>
     
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -20,9 +11,6 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <!-- <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div> -->
                 <div class="sidebar-brand-text mx-3">TPI 2025</div>
             </a>
 
@@ -32,7 +20,7 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="index.jsp">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-user"></i>
                     <span>Inicio</span></a>
             </li>
 
@@ -54,10 +42,9 @@
                 <div id="collapseAdministradores" class="collapse" aria-labelledby="headingAdministradores"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Administrador">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Administrador">Ver</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvReporte">Reporte</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=altaUsuario.jsp&tipo=Administrador">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/listar?tipo=Administrador">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvReporte">Reporte</a>
                     </div>
                 </div>
             </li>
@@ -65,16 +52,15 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVoluntarios"
                     aria-expanded="true" aria-controls="collapseVoluntarios">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-hands-helping"></i>
                     <span>Voluntarios</span>
                 </a>
                 <div id="collapseVoluntarios" class="collapse" aria-labelledby="headingVoluntarios"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Voluntario">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Voluntario">Ver</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=registrarTareaRealizada.jsp">Tarea Realizada</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=altaUsuario.jsp&tipo=Voluntario">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/listar?tipo=Voluntario">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=registrarTareaRealizada.jsp">Tarea Realizada</a>
                     </div>
                 </div>
             </li>
@@ -88,9 +74,8 @@
                 <div id="collapseVeterinarios" class="collapse" aria-labelledby="headingVeterinarios"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Veterinario">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Veterinario">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=altaUsuario.jsp&tipo=Veterinario">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/listar?tipo=Veterinario">Ver</a>
                     </div>
                 </div>
             </li>
@@ -105,9 +90,8 @@
                 <div id="collapseFamilias" class="collapse" aria-labelledby="headingFamilias"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Familia">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Familia">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=altaUsuario.jsp&tipo=Familia">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/listar?tipo=Familia">Ver</a>
                     </div>
                 </div>
             </li>
@@ -122,9 +106,8 @@
                 <div id="collapseHogares" class="collapse" aria-labelledby="headingHogares"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPanel?vista=altaUsuario.jsp&tipo=Hogar">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/listar?tipo=Hogar">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=altaUsuario.jsp&tipo=Hogar">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/listar?tipo=Hogar">Ver</a>
                     </div>
                 </div>
             </li>
@@ -133,22 +116,34 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGatos"
                     aria-expanded="true" aria-controls="collapseGatos">
-                    <i class="fas fa-fw fa-hotel"></i> <!-- Icono para hogar -->
+                    <i class="fas fa-cat"></i>
                     <span>Gatos</span>
                 </a>
                 <div id="collapseGatos" class="collapse" aria-labelledby="headingGatos"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvGato/cargar_alta">Crear</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvGato/listar">Ver</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvHistorial/seleccionar_gato?direccion=/SvHistorial/mostrar_historial">Historial</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/cargar_usuarios_emision">Emision Aptitud</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_gatos_postular">Postularse</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvPostulacion/cargar_mis_postulaciones">Mis Postulaciones</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvUsuario/cargar_usuarios_aptos">Asignar gato</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvVisita/mostrar_gatos">Visita de Seguimiento</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvEstudio/mostrar_gatos">Visita de Seguimiento</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvGato/cargar_alta">Crear</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvGato/listar">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvHistorial/seleccionar_gato?direccion=/privado/SvHistorial/mostrar_historial">Historial</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvEstudio/mostrar_gatos">Registrar Estudio</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvVisita/mostrar_gatos">Visita de Seguimiento</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Sección Postulacion y Aptitud -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePostulaciones"
+                    aria-expanded="true" aria-controls="collapsePostulaciones">
+                    <i class="fas fa-heart"></i>
+                    <span>Adopción</span>
+                </a>
+                <div id="collapsePostulaciones" class="collapse" aria-labelledby="headingPostulaciones"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/cargar_usuarios_emision">Emision Aptitud</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPostulacion/cargar_gatos_postular">Postularse</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPostulacion/cargar_mis_postulaciones">Mis Postulaciones</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/cargar_usuarios_aptos">Asignar gato</a>
                     </div>
                 </div>
             </li>
@@ -156,15 +151,14 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseZonas"
                     aria-expanded="true" aria-controls="collapseZonas">
-                    <i class="fas fa-fw fa-hotel"></i> <!-- Icono para hogar -->
+                    <i class="fas fa-map-marker-alt"></i>
                     <span>Zonas</span>
                 </a>
                 <div id="collapseZonas" class="collapse" aria-labelledby="headingZonas"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <!-- <h6 class="collapse-header">Custom Utilities:</h6> -->
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvZona/cargar_aniadir">Aniadir</a>
-                        <a class="collapse-item" href="${pageContext.request.contextPath}/SvZona/listar">Ver</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvZona/cargar_aniadir">Aniadir</a>
+                        <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvZona/listar">Ver</a>
                     </div>
                 </div>
             </li>
@@ -198,9 +192,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=request.getSession().getAttribute("usuario") %></span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Usuario: <%=request.getSession().getAttribute("usuario") %></span>
+                                <i class="fas fa-bars"></i>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

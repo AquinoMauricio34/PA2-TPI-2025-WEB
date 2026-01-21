@@ -1,9 +1,3 @@
-<%-- 
-    Document   : body2
-    Created on : 2 dic 2025, 1:19:47 p. m.
-    Author     : aquin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
                 </div>
                 <!-- /.container-fluid -->
@@ -30,11 +24,11 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">¿Quieres salir?</h5>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Preciona el boton "logout" para confirmar y salir de la sesión.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                     <a class="btn btn-primary" href="${pageContext.request.contextPath}/SvLogin/logout">Logout</a>
                 </div>
             </div>

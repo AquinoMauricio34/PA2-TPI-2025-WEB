@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  * @author aquin
  */
-@WebServlet(name = "SvTarea", urlPatterns = {"/SvTarea/crear_tarea"})
+@WebServlet(name = "SvTarea", urlPatterns = {"/privado/SvTarea/crear_tarea"})
 public class SvTarea extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -67,8 +67,8 @@ public class SvTarea extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        request.setAttribute("contenido", "/registrarTareaRealizada.jsp");
-        request.getRequestDispatcher("/layout.jsp").forward(request, response);
+        request.setAttribute("contenido", "/privado/registrarTareaRealizada.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
 }

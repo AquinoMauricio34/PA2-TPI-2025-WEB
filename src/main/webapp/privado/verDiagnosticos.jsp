@@ -9,11 +9,17 @@
             <h3 class="m-0 font-weight-bold text-primary">Diagnósticos</h3>
             <input type="hidden" name="gatoId" value="${param.gato}">
             <input type="hidden" name="diagnostico" value="${diagnostico}">
-            <!-- BOTÓN: Crear Diagnóstico -->
-            <a href="${pageContext.request.contextPath}/privado/SvDiagnostico/llamar_mostrarDiagnostico?gato=${param.gato}"
-               class="btn btn-primary">
-                <i class="fas fa-plus"></i> Crear diagnóstico
-            </a>
+            <div>
+                <a href="${pageContext.request.contextPath}/privado/SvEstudio/mostrar_estudios_gato?gato=${param.gato}"
+                   class="btn btn-primary">
+                    <i class="fas fa-book-medical"></i> Estudios
+                </a>
+                <!-- BOTÓN: Crear Diagnóstico -->
+                <a href="${pageContext.request.contextPath}/privado/SvDiagnostico/llamar_mostrarDiagnostico?gato=${param.gato}"
+                   class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Crear diagnóstico
+                </a>
+            </div>
         </div>
 
 

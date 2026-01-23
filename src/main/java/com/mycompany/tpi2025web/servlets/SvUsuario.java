@@ -20,6 +20,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "SvUsuario", urlPatterns = {"/privado/SvUsuario/cargar_usuarios_aptos","/privado/SvUsuario/cambiar_estado", "/privado/SvUsuario/cargar_usuarios_emision", "/privado/SvUsuario/crear", "/privado/SvUsuario/cargar_editar", "/privado/SvUsuario/editar", "/privado/SvUsuario/eliminar", "/privado/SvUsuario/listar"})
+@WebServlet(name = "SvUsuario", urlPatterns = {"/privado/SvUsuario/editar_mi_usuario","/privado/SvUsuario/habilitar_edicion","/privado/SvUsuario/cargar_mis_datos","/privado/SvUsuario/cargar_usuarios_aptos","/privado/SvUsuario/cambiar_estado", "/privado/SvUsuario/cargar_usuarios_emision", "/privado/SvUsuario/crear", "/privado/SvUsuario/cargar_editar", "/privado/SvUsuario/editar", "/privado/SvUsuario/eliminar", "/privado/SvUsuario/listar"})
 public class SvUsuario extends HttpServlet {
 
     private static final Map<String, Class<? extends Usuario>> TIPOS = Map.of(
@@ -59,6 +60,10 @@ public class SvUsuario extends HttpServlet {
             cargarEmision(request, response);
         } else if (uri.endsWith("/cargar_usuarios_aptos")) {
             cargarUsuariosAptos(request, response);
+        } else if (uri.endsWith("/cargar_mis_datos")) {
+            cargarMisDatos(request, response);
+        } else if (uri.endsWith("/habilitar_edicion")) {
+            cargarMisDatosEdicion(request, response);
         }
         System.out.println("svusu doGet fin");
     }
@@ -77,6 +82,10 @@ public class SvUsuario extends HttpServlet {
             crear(request, response);
         } else if (uri.endsWith("/cambiar_estado")) {
             cambiarEstadoEmision(request, response);
+        } else if (uri.endsWith("/editar_mi_usuario")) {
+            editarMiUsuario(request, response);
+        } else if (uri.endsWith("/cargar_mis_datos")) {
+            cargarMisDatos(request, response);
         }
         System.out.println("svusu doPost fin");
     }
@@ -287,6 +296,47 @@ public class SvUsuario extends HttpServlet {
         listaUsuarios.addAll(daoH.findHogarEntities().stream().filter(e -> e.isAptoAdopcion()).collect(Collectors.toList()));
         request.setAttribute("listaUsuarios", listaUsuarios);
         request.setAttribute("contenido", "/privado/verAptosAdopcion.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+    }
+
+    private void cargarMisDatos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+        HttpSession s = request.getSession(false);
+        Usuario usuario = dao.findUsuario((String.valueOf(s.getAttribute("usuario"))));
+        request.setAttribute("nombreUsuario", usuario.getNombre());
+        request.setAttribute("telefonoUsuario", usuario.getTelefono());
+        request.setAttribute("nombreUsuUsuario", usuario.getNombreUsuario());
+        request.setAttribute("contraseniaUsuario", usuario.getContrasena());
+        request.setAttribute("contenido", "/privado/index.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+    }
+
+    private void editarMiUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+        System.out.println(request.getParameter("usuario"));
+        Usuario usuario = dao.findUsuario(request.getParameter("usuario"));
+        usuario.setNombre(request.getParameter("nombre"));
+        usuario.setContrasenia(request.getParameter("contrasenia"));
+        usuario.setTelefono(request.getParameter("telefono"));
+        
+        try {
+            dao.edit(usuario);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        response.sendRedirect(request.getContextPath()+"/privado/SvUsuario/cargar_mis_datos");
+    }
+
+    private void cargarMisDatosEdicion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+        HttpSession s = request.getSession(false);
+        Usuario usuario = dao.findUsuario((String.valueOf(s.getAttribute("usuario"))));
+        request.setAttribute("nombreUsuario", usuario.getNombre());
+        request.setAttribute("telefonoUsuario", usuario.getTelefono());
+        request.setAttribute("nombreUsuUsuario", usuario.getNombreUsuario());
+        request.setAttribute("contraseniaUsuario", usuario.getContrasena());
+        request.setAttribute("contenido", "/privado/indexEditar.jsp");
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 

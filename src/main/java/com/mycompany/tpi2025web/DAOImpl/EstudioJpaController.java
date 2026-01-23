@@ -8,11 +8,11 @@ import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Estudio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import java.io.Serializable;
-import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -133,5 +133,19 @@ public class EstudioJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Estudio> findEstudiosByGatoId(long idGato) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT e FROM Estudio e WHERE e.idGato = :idGato",
+                    Estudio.class
+            )
+                    .setParameter("idGato", idGato)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }

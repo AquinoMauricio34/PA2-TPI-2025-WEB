@@ -103,7 +103,7 @@ public class SvLogin extends HttpServlet {
             s.setAttribute("usuario", nombreUsuario);
             //response.sendRedirect("index.jsp");
             response.sendRedirect(
-                    request.getContextPath() + "/privado/SvPanel?vista=index.jsp"
+                    request.getContextPath() + "/privado/SvUsuario/cargar_mis_datos"
             );
         } else {
             response.sendRedirect("login.jsp");

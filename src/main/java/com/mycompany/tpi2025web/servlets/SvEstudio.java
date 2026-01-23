@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author aquin
  */
-@WebServlet(name = "SvEstudio", urlPatterns = {"/privado/SvEstudio","/privado/SvEstudio/crear_estudio","/privado/SvEstudio/mostrar_campos","/privado/SvEstudio/mostrar_gatos"})
+@WebServlet(name = "SvEstudio", urlPatterns = {"/privado/SvEstudio","/privado/SvEstudio/crear_estudio","/privado/SvEstudio/mostrar_campos","/privado/SvEstudio/mostrar_gatos","/privado/SvEstudio/mostrar_estudios_gato","/privado/SvEstudio/eliminar_estudio"})
 public class SvEstudio extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -37,6 +37,8 @@ public class SvEstudio extends HttpServlet {
             mostrarCampos(request, response);
         } else if (uri.endsWith("/mostrar_gatos")) {
             mostrarGatos(request, response);
+        } else if (uri.endsWith("/mostrar_estudios_gato")) {
+            mostrarEstudiosGato(request, response);
         }
     }
 
@@ -47,6 +49,8 @@ public class SvEstudio extends HttpServlet {
 
         if (uri.endsWith("/crear_estudio")) {
             crearEstudio(request, response);
+        } else if (uri.endsWith("/eliminar_estudio")) {
+            eliminarEstudio(request, response);
         }
     }
 
@@ -88,5 +92,37 @@ public class SvEstudio extends HttpServlet {
         request.setAttribute("listaGatos", listaGatos);
         request.setAttribute("contenido", "/privado/seleccionarGatoEstudio.jsp");
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+    }
+
+    private void mostrarEstudiosGato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        EstudioJpaController dao
+                = new EstudioJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+        System.out.println("svest mostrarestu gatoId: "+request.getParameter("gato"));
+        List<Estudio> listaEstudios = dao.findEstudiosByGatoId(Long.parseLong(request.getParameter("gato")));
+
+        request.setAttribute("gato", request.getParameter("gato"));
+        request.setAttribute("listaEstudios", listaEstudios);
+        request.setAttribute("contenido", "/privado/verEstudiosGato.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+    }
+
+    private void eliminarEstudio(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        EstudioJpaController dao
+                = new EstudioJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+        
+        long idGato = dao.findEstudio(Long.parseLong(request.getParameter("estudioId"))).getIdGato();
+        
+        try {
+            dao.destroy(Long.parseLong(request.getParameter("estudioId")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/privado/SvEstudio/mostrar_estudios_gato?gato=" + idGato);
+        
     }
 }

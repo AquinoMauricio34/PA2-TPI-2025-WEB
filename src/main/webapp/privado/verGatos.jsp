@@ -32,16 +32,17 @@
                                 <td>${u.caracteristicas}</td>
                                 <td>${u.estadoSalud}</td>
                                 <td style="display: flex; width: 230px;">
-
-                                    <!-- ELIMINAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvGato/eliminar" method="POST">
-                                        <input type="hidden" name="gato" value="${u.id}">
-                                        <button type="submit"
-                                            class="btn btn-danger btn-user btn-block"
-                                            style="margin-right: 5px;">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </button>
-                                    </form>
+                                    <c:if test="${sessionScope.tipoUsuarioSesion eq 'Administrador'}">
+                                        <!-- ELIMINAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvGato/eliminar" method="POST">
+                                            <input type="hidden" name="gato" value="${u.id}">
+                                            <button type="submit"
+                                                class="btn btn-danger btn-user btn-block"
+                                                style="margin-right: 5px;">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                        </form>
+                                    </c:if>
 
                                     <!-- EDITAR -->
                                     <form action="${pageContext.request.contextPath}/privado/SvGato/cargar_editar" method="GET"

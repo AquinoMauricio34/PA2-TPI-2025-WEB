@@ -9,6 +9,7 @@
 <form class="user" action="${pageContext.request.contextPath}/privado/SvGato/editar" method="POST">
     <input type="hidden" name="idGatoOriginal"
            value="${g.id}">
+    
     <!-- Primera fila: Nombre y Color -->
     <div class="form-group row">
         <!-- Nombre -->
@@ -16,7 +17,7 @@
             <label for="nombre" class="form-label">Nombre (opcional)</label>
             <input type="text" class="form-control" 
                    id="nombre" name="nombre" 
-                   placeholder="Nombre del gato" value="${g.nombre}">
+                   placeholder="Nombre del gato" value="${g.nombre}" ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'readonly'}>
         </div>
         
         <!-- Color -->
@@ -25,18 +26,21 @@
             <input type="text" class="form-control" 
                    id="color" name="color" 
                    placeholder="Color del gato" value="${g.color}"
-                   required>
+                   required ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'readonly'}>
         </div>
     </div>
     
     <!-- Segunda fila: Zona y Estado de Salud -->
     <div class="form-group row">
         <!-- Zona -->
+        <c:if test="${sessionScope.tipoUsuarioSesion ne 'Administrador'}">
+            <input type="hidden" name="zonaId" value="${g.zona.id}">
+        </c:if>
         <div class="col-sm-6 mb-3">
             <label for="zona" class="form-label">Zona</label>
             <select class="form-control" 
                     id="zona" name="zonaId" 
-                    required>
+                    required ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'disabled'}>
                 <option value="" selected disabled>Seleccione una zona</option>
                 <c:forEach var="zona" items="${listaZonas}">
                     
@@ -79,7 +83,7 @@
             <textarea class="form-control" 
                       id="caracteristicas" name="caracteristicas"
                       placeholder="Describa al gato (edad, tamaño, temperamento, condiciones especiales, etc.)"
-                      rows="4" >${g.caracteristicas}</textarea>
+                      rows="4" ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'readonly'}>${g.caracteristicas}</textarea>
         </div>
     </div>
     

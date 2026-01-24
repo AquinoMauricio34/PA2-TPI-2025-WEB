@@ -34,9 +34,9 @@
                                     <form action="${pageContext.request.contextPath}/privado/SvGato/cargar_gatos_elegir" method="GET">
                                         <input type="hidden" name="usuario" value="${u.nombreUsuario}">
                                         <button type="submit"
-                                                class="btn btn-secondary btn-user btn-block"
+                                                class="btn btn-primary btn-user btn-block"
                                                 style="margin-right: 5px;">
-                                            <i class="fas fa-trash-alt"></i> Seleccionar
+                                            Seleccionar
                                         </button>
                                     </form>
 

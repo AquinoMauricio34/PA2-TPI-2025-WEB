@@ -101,6 +101,7 @@ public class SvLogin extends HttpServlet {
         if (validacion) {
             HttpSession s = request.getSession(true);
             s.setAttribute("usuario", nombreUsuario);
+            s.setAttribute("tipoUsuarioSesion", dao.findUsuario(nombreUsuario).getTipoUsuario());
             //response.sendRedirect("index.jsp");
             response.sendRedirect(
                     request.getContextPath() + "/privado/SvUsuario/cargar_mis_datos"

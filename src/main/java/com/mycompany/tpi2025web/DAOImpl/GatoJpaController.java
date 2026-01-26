@@ -200,4 +200,18 @@ public class GatoJpaController implements Serializable {
         }
     }
 
+    public List<Gato> findGatosByNombreUsuario(String nombreUsuario) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT g FROM Gato g WHERE g.usuario.nombreUsuario = :nombreUsuario",
+                    Gato.class
+            )
+                    .setParameter("nombreUsuario", nombreUsuario)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }

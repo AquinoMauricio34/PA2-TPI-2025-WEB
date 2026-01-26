@@ -173,7 +173,7 @@
 
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/cargar_usuarios_emision">Emision Aptitud</a>
                             </c:if>
-                            <c:if test="${rol eq 'Administrador' or rol eq 'Familia' or rol eq 'Hogar'}">
+                            <c:if test="${rol eq 'Familia' or rol eq 'Hogar'}">
 
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPostulacion/cargar_gatos_postular">Postularse</a>
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPostulacion/cargar_mis_postulaciones">Mis Postulaciones</a>

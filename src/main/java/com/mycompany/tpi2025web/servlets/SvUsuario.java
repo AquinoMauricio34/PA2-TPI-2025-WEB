@@ -5,11 +5,13 @@
 package com.mycompany.tpi2025web.servlets;
 
 import com.mycompany.tpi2025web.DAOImpl.FamiliaJpaController;
+import com.mycompany.tpi2025web.DAOImpl.GatoJpaController;
 import com.mycompany.tpi2025web.DAOImpl.HogarJpaController;
 import com.mycompany.tpi2025web.DAOImpl.UsuarioJpaController;
 import com.mycompany.tpi2025web.DAOImpl.exceptions.NonexistentEntityException;
 import com.mycompany.tpi2025web.model.Administrador;
 import com.mycompany.tpi2025web.model.Familia;
+import com.mycompany.tpi2025web.model.Gato;
 import com.mycompany.tpi2025web.model.Hogar;
 import com.mycompany.tpi2025web.model.Usuario;
 import com.mycompany.tpi2025web.model.Veterinario;
@@ -307,6 +309,12 @@ public class SvUsuario extends HttpServlet {
         request.setAttribute("telefonoUsuario", usuario.getTelefono());
         request.setAttribute("nombreUsuUsuario", usuario.getNombreUsuario());
         request.setAttribute("contraseniaUsuario", usuario.getContrasena());
+        String tipoSesion = String.valueOf(s.getAttribute("tipoUsuarioSesion"));
+        if(tipoSesion.equals("Hogar")||tipoSesion.equals("Familia")){
+            GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+            List<Gato> listaGatos = daoG.findGatosByNombreUsuario(String.valueOf(s.getAttribute("usuario")));
+            request.setAttribute("listaGatos", listaGatos);
+        }
         request.setAttribute("contenido", "/privado/index.jsp");
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }

@@ -11,7 +11,7 @@
             <div class="table-responsive">
 
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    
+
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -31,17 +31,19 @@
                                 <td>${u.color}</td>
                                 <td>${u.caracteristicas}</td>
                                 <td>${u.estadoSalud}</td>
-                                <td style="display: flex; width: 230px;">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
 
-                                    <!-- SELECCIONAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvEstudio/mostrar_campos" method="GET">
-                                        <input type="hidden" name="gato" value="${u.id}">
-                                        <button type="submit"
-                                            class="btn btn-primary btn-user btn-block"
-                                            style="margin-right: 5px;">
-                                            Seleccionar
-                                        </button>
-                                    </form>
+                                        <!-- SELECCIONAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvEstudio/mostrar_campos" method="GET">
+                                            <input type="hidden" name="gato" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-user btn-block"
+                                                    style="margin-right: 5px;">
+                                                Seleccionar
+                                            </button>
+                                        </form>
+                                    </div>
 
                                 </td>
                             </tr>

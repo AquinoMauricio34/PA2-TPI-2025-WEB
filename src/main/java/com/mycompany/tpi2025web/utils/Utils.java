@@ -1,4 +1,3 @@
-
 package com.mycompany.tpi2025web.utils;
 
 import com.google.zxing.BarcodeFormat;
@@ -10,12 +9,17 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 
-public class QRUtils {
+public class Utils {
 
     public static String generarQRBase64(String texto) throws WriterException, IOException {
 
@@ -45,4 +49,43 @@ public class QRUtils {
 
         return Base64.getEncoder().encodeToString(bytes);
     }
+
+    public static boolean isLong(String str) {
+        if (str == null) {
+            return false;
+        }
+        try {
+            Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean isFechaValida(String fecha) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("dd/MM/uuuu")
+                .withResolverStyle(ResolverStyle.STRICT);
+
+        try {
+            LocalDate.parse(fecha, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public static boolean isHoraValida(String hora) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("HH:mm")
+                .withResolverStyle(ResolverStyle.STRICT);
+
+        try {
+            LocalTime.parse(hora, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
 }

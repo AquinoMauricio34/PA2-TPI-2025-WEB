@@ -327,7 +327,7 @@ public class SvDiagnostico extends HttpServlet {
 
         request.setAttribute("abandonoTratamiento", t.getAbandono_tratamiento());
         System.out.println("svtrat cargEdit abandonoTratamiento (t.getAbandono_tratamiento()): " + t.getAbandono_tratamiento());
-        request.setAttribute("contenido","/editarTratamiento.jsp");
+        request.setAttribute("contenido","/privado/editarTratamiento.jsp");
         System.out.println("svtrat cargEdit Vista volver: "+request.getParameter("vistaVolver"));
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         

@@ -119,7 +119,7 @@ public class SvTratamiento extends HttpServlet {
         request.setAttribute("fechaFin", t.getFecha_fin());
         request.setAttribute("descripcionTratamiento", t.getDescripcion());
         request.setAttribute("abandonoTratamiento", t.getAbandono_tratamiento());
-        request.setAttribute("contenido","/editarTratamiento.jsp");
+        request.setAttribute("contenido","/privado/editarTratamiento.jsp");
         System.out.println("svtrat cargEdit Vista volver: "+request.getParameter("vistaVolver"));
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         

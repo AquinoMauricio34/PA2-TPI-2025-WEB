@@ -29,19 +29,21 @@
                                 <td>${u.color}</td>
                                 <td>${u.caracteristicas}</td>
                                 <td>${u.estadoSalud}</td>
-                                <td style="display: flex; width: 230px;">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
 
-                                    <!-- POSTULARSE -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvPostulacion/postularse" method="POST">
-                                        <input type="hidden" name="gato" value="${u.id}">
-                                        <button type="submit"
-                                                class="btn btn-user btn-block btn-primary"
-                                                style="margin-right: 5px;">
-                                            <i class="fas fa-hand"></i> Postularse
-                                        </button>
+                                        <!-- POSTULARSE -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvPostulacion/postularse" method="POST">
+                                            <input type="hidden" name="gato" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-user btn-block btn-primary"
+                                                    style="margin-right: 5px;">
+                                                <i class="fas fa-hand"></i> Postularse
+                                            </button>
 
 
-                                    </form>
+                                        </form>
+                                    </div>
 
                                 </td>
                             </tr>

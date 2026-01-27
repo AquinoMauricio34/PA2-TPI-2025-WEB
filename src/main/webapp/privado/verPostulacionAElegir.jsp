@@ -26,19 +26,20 @@
                             <tr>
                                 <td>${u.id}</td>
                                 <td>${u.idGato}</td>
-                                <td style="display: flex; width: 230px;">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
 
-                                    <!-- Adoptar -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvGato/adoptar_gato" method="POST">
-                                        <input type="hidden" name="postulacionId" value="${u.id}">
-                                        <button type="submit"
-                                                class="btn btn-info btn-user btn-block"
-                                                style="margin-right: 5px;">
-                                            <i class="fas fa-trash-alt"></i> Adoptar
-                                        </button>
-                                    </form>
+                                        <!-- Adoptar -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvGato/adoptar_gato" method="POST">
+                                            <input type="hidden" name="postulacionId" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-info btn-user btn-block"
+                                                    style="margin-right: 5px;">
+                                                Adoptar
+                                            </button>
+                                        </form>
 
-
+                                    </div>
 
                                 </td>
                             </tr>

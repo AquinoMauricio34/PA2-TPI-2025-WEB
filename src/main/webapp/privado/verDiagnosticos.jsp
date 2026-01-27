@@ -4,7 +4,7 @@
     <div class="card shadow mb-4">
 
         <input type="hidden" name="gatoId" value="${gato}">
-        
+
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h3 class="m-0 font-weight-bold text-primary">Diagnósticos</h3>
             <input type="hidden" name="gatoId" value="${param.gato}">
@@ -27,7 +27,7 @@
             <div class="table-responsive">
 
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    
+
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -45,30 +45,32 @@
                                 <td>${u.diagnostico}</td>
                                 <td>${u.descripcion}</td>
                                 <td>${u.fecha_diagnostico}</td>
-                                <td style="display: flex; width: 230px;">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
 
-                                    <!-- ELIMINAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/eliminar" method="POST">
-                                        <input type="hidden" name="gatoId" value="${gato}">
-                                        <input type="hidden" name="diagnostico" value="${u.id}">
-                                        <button type="submit"
-                                            class="btn btn-danger btn-user btn-block"
-                                            style="margin-right: 5px;">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </button>
-                                    </form>
+                                        <!-- ELIMINAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/eliminar" method="POST">
+                                            <input type="hidden" name="gatoId" value="${gato}">
+                                            <input type="hidden" name="diagnostico" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-user btn-block"
+                                                    style="margin-right: 5px;">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                        </form>
 
-                                    <!-- EDITAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/cargar_editar" method="GET"
-                                        style="margin-left: 5px;">
-                                        <input type="hidden" name="gatoId" value="${gato}">
-                                        <input type="hidden" name="diagnostico" value="${u.id}">
-                                        <button type="submit"
-                                            class="btn btn-primary btn-user btn-block">
-                                            <i class="fas fa-pencil-alt"></i> Ver
-                                        </button>
-                                    </form>
+                                        <!-- EDITAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/cargar_editar" method="GET"
+                                              style="margin-left: 5px;">
+                                            <input type="hidden" name="gatoId" value="${gato}">
+                                            <input type="hidden" name="diagnostico" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-user btn-block">
+                                                <i class="fas fa-pencil-alt"></i> Ver
+                                            </button>
+                                        </form>
 
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>

@@ -28,18 +28,20 @@
                                 <td>${u.telefono}</td>
                                 <td>${u.nombreUsuario}</td>
 
-                                <td style="display: flex; width: 230px;">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
 
-                                    <!-- BOTON DE EMISION DE CERTIFICADO DE APTITUD PARA ADOPCION -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvGato/cargar_gatos_elegir" method="GET">
-                                        <input type="hidden" name="usuario" value="${u.nombreUsuario}">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-user btn-block"
-                                                style="margin-right: 5px;">
-                                            Seleccionar
-                                        </button>
-                                    </form>
+                                        <!-- BOTON DE EMISION DE CERTIFICADO DE APTITUD PARA ADOPCION -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvGato/cargar_gatos_elegir" method="GET">
+                                            <input type="hidden" name="usuario" value="${u.nombreUsuario}">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-user btn-block"
+                                                    style="margin-right: 5px;">
+                                                Seleccionar
+                                            </button>
+                                        </form>
 
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>

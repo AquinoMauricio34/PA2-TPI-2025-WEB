@@ -31,18 +31,20 @@
                                 <td>${u.color}</td>
                                 <td>${u.caracteristicas}</td>
                                 <td>${u.estadoSalud}</td>
-                                <td style="display: flex; width: 230px;">
-                                    <!-- EDITAR -->
-                                    <form action="${pageContext.request.contextPath}${direccion}" method="GET"
-                                          style="margin-left: 5px;">
-                                        <input type="hidden" name="gato" value="${u.id}">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-user btn-block">
-                                            Seleccionar
-                                        </button>
-                                    </form>
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
+                                        <!-- EDITAR -->
+                                        <form action="${pageContext.request.contextPath}${direccion}" method="GET">
+                                            <input type="hidden" name="gato" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-user">
+                                                Seleccionar
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
-                                
+
+
                             </tr>
                         </c:forEach>
                     </tbody>

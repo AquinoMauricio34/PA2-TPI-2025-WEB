@@ -5,48 +5,68 @@
 
 <form class="user" action="${pageContext.request.contextPath}/privado/SvTarea/crear_tarea" method="POST">
 
-    <!-- Primera fila: Nombre y Color -->
+    <!-- Primera fila: Fecha y Hora -->
     <div class="form-group row">
-        <!-- Nombre -->
+        <!-- Fecha -->
         <div class="col-sm-6 mb-3">
-            <label for="fecha" class="form-label">Fecha</label>
+            <label for="fecha" class="form-label ${errores.fecha != null ? 'is-invalid' : ''}">Fecha</label>
             <input type="text" class="form-control" 
                    id="fecha" name="fecha" 
-                   placeholder="dd/mm/yyyy"
-                   required>
+                   placeholder="dd/mm/yyyy" value="${fechaTarea}">
+            <c:if test="${errores.fecha != null}">
+                <div class="invalid-feedback">
+                    ${errores.fecha}
+                </div>
+            </c:if>
         </div>
 
-        <!-- Color -->
+        <!-- Hora -->
         <div class="col-sm-6 mb-3">
-            <label for="hora" class="form-label">Hora</label>
+            <label for="hora" class="form-label ${errores.hora != null ? 'is-invalid' : ''}">Hora</label>
             <input type="text" class="form-control" 
                    id="hora" name="hora" 
-                   placeholder="hh:mm" 
-                   required>
+                   placeholder="hh:mm" value="${horaTarea}">
+            <c:if test="${errores.hora != null}">
+                <div class="invalid-feedback">
+                    ${errores.hora}
+                </div>
+            </c:if>
         </div>
     </div>
 
-    <!-- Segunda fila: Zona y Estado de Salud -->
+    <!-- Segunda fila: Ubicacion y tipo de tarea -->
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
-            <label for="ubicacion" class="form-label">Ubicacion</label>
+            <label for="ubicacion" class="form-label ${errores.ubicacion != null ? 'is-invalid' : ''}">Ubicacion</label>
             <input type="text" class="form-control" 
                    id="ubicacion" name="ubicacion" 
-                   placeholder="Ubicacion" 
-                   required>
+                   placeholder="Ubicacion" value="${ubicacionTarea}">
+            <c:if test="${errores.ubicacion != null}">
+                <div class="invalid-feedback">
+                    ${errores.ubicacion}
+                </div>
+            </c:if>
         </div>
-        <!-- Estado de Salud -->
+        <!-- Tipo de tarea -->
         <div class="col-sm-6 mb-3">
             <label for="tarea" class="form-label">Tipo de tarea</label>
-            <select class="form-control" 
-                    id="tarea" name="tarea" 
-                    required>
-                <option value="" selected disabled>Seleccione una tarea</option>
-                <option value="ALIMENTACION">Alimentación</option>
-                <option value="CAPTURA_CASTRACION">Captura para castración</option>
-                <option value="CONTROL_VETERINARIO">Control veterinario</option>
-                <option value="TRANSPORTE_HOGAR_TRANSITORIO">Transporte a hogar transitorio</option>
+            <select class="form-control  ${errores.tipoTarea != null ? 'is-invalid' : ''}" 
+                    id="tarea" name="tarea">
+                <option value="" selected>Seleccione una tarea</option>
+                <option value="ALIMENTACION"
+                        ${tipoTarea == 'ALIMENTACION' ? 'selected' : ''}>Alimentación</option>
+                <option value="CAPTURA_CASTRACION"
+                        ${tipoTarea == 'CAPTURA_CASTRACION' ? 'selected' : ''}>Captura para castración</option>
+                <option value="CONTROL_VETERINARIO"
+                        ${tipoTarea == 'CONTROL_VETERINARIO' ? 'selected' : ''}>Control veterinario</option>
+                <option value="TRANSPORTE_HOGAR_TRANSITORIO"
+                        ${tipoTarea == 'TRANSPORTE_HOGAR_TRANSITORIO' ? 'selected' : ''}>Transporte a hogar transitorio</option>
             </select>
+            <c:if test="${errores.tipoTarea != null}">
+                <div class="invalid-feedback">
+                    ${errores.tipoTarea}
+                </div>
+            </c:if>
         </div>
     </div>
 

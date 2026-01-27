@@ -17,15 +17,18 @@ import com.mycompany.tpi2025web.model.Postulacion;
 import com.mycompany.tpi2025web.model.Usuario;
 import com.mycompany.tpi2025web.model.Zona;
 import com.mycompany.tpi2025web.model.enums.EstadoSalud;
-import com.mycompany.tpi2025web.utils.QRUtils;
+import com.mycompany.tpi2025web.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,27 +101,75 @@ public class SvGato extends HttpServlet {
         ZonaJpaController daoZ = new ZonaJpaController((EntityManagerFactory) getServletContext().getAttribute("emf"));
         GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) getServletContext().getAttribute("emf"));
 
+        Map<String, String> errores = new HashMap<>();
+
+        //obtención de los datos
+        String nombreG = request.getParameter("nombre").trim();
+        String colorG = request.getParameter("color").trim();
+        String caracteristicasG = request.getParameter("caracteristicas").trim();
+        String estadoSaludG = request.getParameter("estadoSalud").trim();
+        Long zonaIdG = 0L;
+        //se utiliza try porque si el string obtenido no es un numero lanza una excepcion
+        try {
+            zonaIdG = Long.valueOf(request.getParameter("zonaId"));
+        } catch (Exception e) {
+            //esta asignacion sirve luego para la validacion
+            zonaIdG = null;
+        }
+
+        //reiyeccion
+        request.setAttribute("nombreG", nombreG);
+        request.setAttribute("colorG", colorG);
+        request.setAttribute("caracteristicasG", caracteristicasG);
+        request.setAttribute("estadoSaludG", estadoSaludG);
+        request.setAttribute("zonaIdG", zonaIdG);
+        request.setAttribute("listaZonas", daoZ.findZonaEntities());
+        
+
+        //validacion de datos
+        if (colorG == null || colorG.isBlank()) {
+            errores.put("colorGato", "El color es obligatorio");
+        }
+        if (zonaIdG == null) {
+            errores.put("zonaIdGato", "Debe seleccionar una zona");
+        }
+
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/altaGato.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+            return;
+        }
+
         Gato g = new Gato();
-        g.setNombre(request.getParameter("nombre"));
-        g.setColor(request.getParameter("color"));
-        g.setCaracteristicas(request.getParameter("caracteristicas"));
-        g.setEstadoSalud(EstadoSalud.valueOf(request.getParameter("estadoSalud")));
+        g.setNombre(nombreG);
+        g.setColor(colorG);
+        g.setCaracteristicas(caracteristicasG);
+        g.setEstadoSalud(EstadoSalud.valueOf(estadoSaludG));
         g.setHistorial();
 
-        Zona z = daoZ.findZona(Long.parseLong(request.getParameter("zonaId")));
+        Zona z = daoZ.findZona(zonaIdG);
         g.setZona(z);
 
         try {
             daoG.create(g);
             g.setQr("QR" + g.getId());
-            //g.setQr(QRUtils.generarQRBase64(g.toString()));
 
             daoG.edit(g);
             System.out.println("svgato crear try 4");
-
+            HttpSession s = request.getSession(false);
+            s.setAttribute("mensajeExito", "El gato se registró exitosamente");
         } catch (Exception ex) {
+            errores.put("errorGeneral", "El gato no se ha podido registrar");
             Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
+        }
+        
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/altaGato.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+            return;
         }
 
         response.sendRedirect(request.getContextPath() + "/privado/SvGato/cargar_alta");
@@ -203,7 +254,7 @@ public class SvGato extends HttpServlet {
 
         String qrBase64 = null;
         try {
-            qrBase64 = QRUtils.generarQRBase64(textoQR);
+            qrBase64 = Utils.generarQRBase64(textoQR);
         } catch (WriterException ex) {
             Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -287,9 +338,9 @@ public class SvGato extends HttpServlet {
         } catch (Exception e) {
             throw new RuntimeException("Error al adoptar gato", e);
         }
-        
+
         response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/cargar_usuarios_aptos");
-        
+
     }
 
 }

@@ -25,19 +25,21 @@
                             <tr>
                                 <td>${u.id}</td>
                                 <td>${u.idGato}</td>
-                                <td style="display: flex; width: 230px;">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
 
-                                    <!-- ELIMINAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvPostulacion/eliminar_postulacion" method="POST">
-                                        <input type="hidden" name="postulacionId" value="${u.id}">
-                                        <button type="submit"
-                                                class="btn btn-info btn-user btn-block"
-                                                style="margin-right: 5px;">
-                                            <i class="fas fa-trash-alt"></i> Deshacer Postulación
-                                        </button>
-                                    </form>
+                                        <!-- ELIMINAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvPostulacion/eliminar_postulacion" method="POST">
+                                            <input type="hidden" name="postulacionId" value="${u.id}">
+                                            <button type="submit"
+                                                    class="btn btn-info btn-user btn-block"
+                                                    style="margin-right: 5px;">
+                                                <i class="fas fa-trash-alt"></i> Deshacer Postulación
+                                            </button>
+                                        </form>
 
 
+                                    </div>
 
                                 </td>
                             </tr>

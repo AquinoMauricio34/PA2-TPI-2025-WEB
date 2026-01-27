@@ -27,13 +27,14 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "SvUsuario", urlPatterns = {"/privado/SvUsuario/editar_mi_usuario","/privado/SvUsuario/habilitar_edicion","/privado/SvUsuario/cargar_mis_datos","/privado/SvUsuario/cargar_usuarios_aptos","/privado/SvUsuario/cambiar_estado", "/privado/SvUsuario/cargar_usuarios_emision", "/privado/SvUsuario/crear", "/privado/SvUsuario/cargar_editar", "/privado/SvUsuario/editar", "/privado/SvUsuario/eliminar", "/privado/SvUsuario/listar"})
+@WebServlet(name = "SvUsuario", urlPatterns = {"/privado/SvUsuario/editar_mi_usuario", "/privado/SvUsuario/habilitar_edicion", "/privado/SvUsuario/cargar_mis_datos", "/privado/SvUsuario/cargar_usuarios_aptos", "/privado/SvUsuario/cambiar_estado", "/privado/SvUsuario/cargar_usuarios_emision", "/privado/SvUsuario/crear", "/privado/SvUsuario/cargar_editar", "/privado/SvUsuario/editar", "/privado/SvUsuario/eliminar", "/privado/SvUsuario/listar"})
 public class SvUsuario extends HttpServlet {
 
     private static final Map<String, Class<? extends Usuario>> TIPOS = Map.of(
@@ -150,22 +151,51 @@ public class SvUsuario extends HttpServlet {
         }
     }
 
-    private void editar(HttpServletRequest request, HttpServletResponse response) {
+    private void editar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
 
-        String nombre = request.getParameter("nombre");
-        String telefono = request.getParameter("telefono");
+        Map<String, String> errores = new HashMap<>();
+
+        //obtener datos
+        String nombre = request.getParameter("nombre").trim();
+        String telefono = request.getParameter("telefono").trim();
+        String nombreUsuario = request.getParameter("nombreUsuario").trim();
+        String tipoUsuario = request.getParameter("tipo").trim();
+        Usuario usuDatos = new Usuario(nombre, "", telefono, nombreUsuario);
+
+        //reiyeccion
+        request.setAttribute("usuarioEditar", usuDatos);
+        request.setAttribute("tipo", tipoUsuario);
+        //el tipo de usuario como viene como parametro
+
+        //verificacion
+        if (nombre == null || nombre.isBlank()) {
+            errores.put("errorNombre", "El nombre es obligatorio");
+        }
+        if (telefono == null || telefono.isBlank()) {
+            errores.put("errorTelefono", "El teléfono es obligatorio");
+        }
+
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/editarUsuario.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+            return;
+        }
 
         Usuario usu = dao.findUsuario(request.getParameter("usuarioOriginal"));
         usu.setNombre(nombre);
         usu.setTelefono(telefono);
 
+        HttpSession s = request.getSession(false);
         try {
             dao.edit(usu);
-            response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/listar?tipo=" + usu.getTipoUsuario());
+            s.setAttribute("mensajeExito", "El usuario se modificó exitosamente");
         } catch (Exception ex) {
             ex.printStackTrace();
+            s.setAttribute("mensajeFallo", "Ocurrió un fallo en la modificación del usuario");
         }
+        response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/listar?tipo=" + usu.getTipoUsuario());
     }
 
     private void carga_editar(HttpServletRequest request, HttpServletResponse response) {
@@ -188,66 +218,171 @@ public class SvUsuario extends HttpServlet {
         }
     }
 
-    private void crear(HttpServletRequest request, HttpServletResponse response) {
-        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+//    private void crear(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+//
+//        // Mapa de errores
+//        Map<String, String> errores = new HashMap<>();
+//
+//        String usuario = request.getParameter("usuario");
+//        if (dao.findUsuario(usuario) != null) {
+//            System.out.println("usuario ya existe");
+//            errores.put("usuarioExistente", "El nombre de usuario ya existe");
+//            //request.setAttribute("errorUsuario", "El nombre de usuario ya existe");
+//            request.setAttribute("contenido", "/privado/altaUsuario.jsp");
+//            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+//            return;
+//        }
+//
+//        String tipo = request.getParameter("tipo");
+//        String nombre = request.getParameter("nombre");
+//        String telefono = request.getParameter("telefono");
+//        String contrasenia = request.getParameter("contrasenia");
+//        //transitorio en caso de hogar
+//        String isTransitorio = request.getParameter("isTransitorio");
+//        System.out.println(isTransitorio + "----------------------------------------------------------------------");
+//        System.out.println("Creando usuario - Tipo: " + tipo + ", Nombre: " + nombre
+//                + ", Teléfono: " + telefono + ", Usuario: " + usuario);
+//
+//        try {
+//            // Crear el usuario según el tipo usando reflexión
+//            Class<? extends Usuario> usuarioClass = TIPOS.get(tipo);
+//            if (usuarioClass == null) {
+//                throw new IllegalArgumentException("Tipo de usuario no válido: " + tipo);
+//            }
+//
+//            // Obtener el constructor con los parámetros necesarios
+//            Constructor<? extends Usuario> constructor = !tipo.equals("Hogar") ? usuarioClass.getConstructor(
+//                    String.class, // nombre
+//                    String.class, // contrasenia
+//                    String.class, // telefono
+//                    String.class // nombreUsuario
+//            ) : usuarioClass.getConstructor(
+//                    String.class, // nombre
+//                    String.class, // contrasenia
+//                    String.class, // telefono
+//                    String.class, // nombreUsuario
+//                    boolean.class
+//            );
+//            System.out.println("constructor ADQUIRIDO");
+//            // Crear la instancia
+//            Usuario nuevoUsuario = !tipo.equals("Hogar") ? constructor.newInstance(nombre, contrasenia, telefono, usuario) : constructor.newInstance(nombre, contrasenia, telefono, usuario, isTransitorio != null);
+//            System.out.println("constructor INSTANCIADO");
+//
+//            // Persistir en la base de datos
+//            dao.create(nuevoUsuario);
+//
+//            System.out.println("Usuario creado exitosamente: " + usuario);
+//
+//        } catch (NoSuchMethodException e) {
+//            System.err.println("Error: La clase " + TIPOS.get(tipo) + " no tiene el constructor esperado");
+//            e.printStackTrace();
+//        } catch (InstantiationException | IllegalAccessException
+//                | IllegalArgumentException | InvocationTargetException e) {
+//            System.err.println("Error al crear instancia del usuario");
+//            e.printStackTrace();
+//        } catch (Exception ex) {
+//            System.err.println("Error general al crear usuario");
+//            ex.printStackTrace();
+//        }
+//
+//        try {
+//            response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=index.jsp");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+    private void crear(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        UsuarioJpaController dao
+                = new UsuarioJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
+        // 🧠 Mapa único de errores
+        Map<String, String> errores = new HashMap<>();
 
         String tipo = request.getParameter("tipo");
         String nombre = request.getParameter("nombre");
         String telefono = request.getParameter("telefono");
-        String usuario = request.getParameter("usuario");
+        String usuarioCrear = request.getParameter("usuarioCrear");
         String contrasenia = request.getParameter("contrasenia");
         String isTransitorio = request.getParameter("isTransitorio");
-        System.out.println(isTransitorio + "----------------------------------------------------------------------");
-        System.out.println("Creando usuario - Tipo: " + tipo + ", Nombre: " + nombre
-                + ", Teléfono: " + telefono + ", Usuario: " + usuario);
 
+        // 🔁 Reinyectar valores (para no perder datos en el form)
+        request.setAttribute("nombre", nombre);
+        request.setAttribute("telefono", telefono);
+        request.setAttribute("usuarioCrear", usuarioCrear);
+        request.setAttribute("tipo", tipo);
+
+        // 🔴 Validaciones
+        if (usuarioCrear == null || usuarioCrear.trim().isEmpty()) {
+            errores.put("usuario", "El usuario es obligatorio");
+        } else if (dao.findUsuario(usuarioCrear) != null) {
+            errores.put("usuario", "El nombre de usuario ya existe");
+        }
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            errores.put("nombre", "El nombre es obligatorio");
+        }
+
+        if (telefono == null || telefono.trim().isEmpty()) {
+            errores.put("telefono", "El teléfono es obligatorio");
+        }
+
+        if (contrasenia == null || contrasenia.trim().isEmpty()) {
+            errores.put("contrasenia", "La contraseña es obligatoria");
+        }
+
+        if (!TIPOS.containsKey(tipo)) {
+            errores.put("tipo", "Tipo de usuario inválido");
+        }
+
+        // ❌ Si hay errores → volver al formulario
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/altaUsuario.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        // ✅ Crear usuario
         try {
-            // Crear el usuario según el tipo usando reflexión
             Class<? extends Usuario> usuarioClass = TIPOS.get(tipo);
-            if (usuarioClass == null) {
-                throw new IllegalArgumentException("Tipo de usuario no válido: " + tipo);
-            }
 
-            // Obtener el constructor con los parámetros necesarios
-            Constructor<? extends Usuario> constructor = !tipo.equals("Hogar") ? usuarioClass.getConstructor(
-                    String.class, // nombre
-                    String.class, // contrasenia
-                    String.class, // telefono
-                    String.class // nombreUsuario
-            ) : usuarioClass.getConstructor(
-                    String.class, // nombre
-                    String.class, // contrasenia
-                    String.class, // telefono
-                    String.class, // nombreUsuario
-                    boolean.class
-            );
-            System.out.println("constructor ADQUIRIDO");
-            // Crear la instancia
-            Usuario nuevoUsuario = !tipo.equals("Hogar") ? constructor.newInstance(nombre, contrasenia, telefono, usuario) : constructor.newInstance(nombre, contrasenia, telefono, usuario, isTransitorio != null);
-            System.out.println("constructor INSTANCIADO");
+            Constructor<? extends Usuario> constructor
+                    = !tipo.equals("Hogar")
+                    ? usuarioClass.getConstructor(String.class, String.class, String.class, String.class)
+                    : usuarioClass.getConstructor(String.class, String.class, String.class, String.class, boolean.class);
 
-            // Persistir en la base de datos
+            Usuario nuevoUsuario
+                    = !tipo.equals("Hogar")
+                    ? constructor.newInstance(nombre, contrasenia, telefono, usuarioCrear)
+                    : constructor.newInstance(nombre, contrasenia, telefono, usuarioCrear, isTransitorio != null);
+
             dao.create(nuevoUsuario);
 
-            System.out.println("Usuario creado exitosamente: " + usuario);
-
         } catch (NoSuchMethodException e) {
-            System.err.println("Error: La clase " + TIPOS.get(tipo) + " no tiene el constructor esperado");
-            e.printStackTrace();
-        } catch (InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            System.err.println("Error al crear instancia del usuario");
-            e.printStackTrace();
-        } catch (Exception ex) {
-            System.err.println("Error general al crear usuario");
-            ex.printStackTrace();
+            errores.put("general", "Error interno: constructor no encontrado");
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            errores.put("general", "Error al crear el usuario");
+        } catch (Exception e) {
+            errores.put("general", "Error inesperado al guardar el usuario");
         }
 
-        try {
-            response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=index.jsp");
-        } catch (IOException e) {
-            e.printStackTrace();
+        // ❌ Error al crear → volver al form
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/altaUsuario.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp")
+                    .forward(request, response);
+            return;
         }
+
+        // ✅ Éxito
+        response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=index.jsp");
     }
 
     private void cargarEmision(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -262,8 +397,6 @@ public class SvUsuario extends HttpServlet {
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
 
     }
-
-    
 
     private void cambiarEstadoEmision(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
@@ -284,9 +417,8 @@ public class SvUsuario extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        response.sendRedirect(request.getContextPath()+"/privado/SvUsuario/cargar_usuarios_emision");
+
+        response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/cargar_usuarios_emision");
     }
 
     private void cargarUsuariosAptos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -310,7 +442,7 @@ public class SvUsuario extends HttpServlet {
         request.setAttribute("nombreUsuUsuario", usuario.getNombreUsuario());
         request.setAttribute("contraseniaUsuario", usuario.getContrasena());
         String tipoSesion = String.valueOf(s.getAttribute("tipoUsuarioSesion"));
-        if(tipoSesion.equals("Hogar")||tipoSesion.equals("Familia")){
+        if (tipoSesion.equals("Hogar") || tipoSesion.equals("Familia")) {
             GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
             List<Gato> listaGatos = daoG.findGatosByNombreUsuario(String.valueOf(s.getAttribute("usuario")));
             request.setAttribute("listaGatos", listaGatos);
@@ -326,14 +458,14 @@ public class SvUsuario extends HttpServlet {
         usuario.setNombre(request.getParameter("nombre"));
         usuario.setContrasenia(request.getParameter("contrasenia"));
         usuario.setTelefono(request.getParameter("telefono"));
-        
+
         try {
             dao.edit(usuario);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        response.sendRedirect(request.getContextPath()+"/privado/SvUsuario/cargar_mis_datos");
+
+        response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/cargar_mis_datos");
     }
 
     private void cargarMisDatosEdicion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

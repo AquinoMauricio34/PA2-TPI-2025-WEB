@@ -16,38 +16,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- *
- * @author aquin
- */
 @WebServlet(name = "SvLogin", urlPatterns = {"/SvLogin/login", "/SvLogin/logout", "/SvLogin/registrar_familia"})
 public class SvLogin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -61,14 +40,6 @@ public class SvLogin extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/login.jsp");
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -82,44 +53,148 @@ public class SvLogin extends HttpServlet {
 
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
-    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        List<Usuario> listaUsuario = dao.findUsuarioEntities();
-        String nombreUsuario = request.getParameter("nombreUsuario");
-        String contrasenia = request.getParameter("contrasenia");
-        boolean validacion = listaUsuario.stream().anyMatch(u -> u.getNombreUsuario().equals(nombreUsuario) && u.getContrasena().equals(contrasenia));
-        if (validacion) {
-            HttpSession s = request.getSession(true);
-            s.setAttribute("usuario", nombreUsuario);
-            s.setAttribute("tipoUsuarioSesion", dao.findUsuario(nombreUsuario).getTipoUsuario());
-            //response.sendRedirect("index.jsp");
-            response.sendRedirect(
-                    request.getContextPath() + "/privado/SvUsuario/cargar_mis_datos"
-            );
-        } else {
-            response.sendRedirect("login.jsp");
+    private void login(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        UsuarioJpaController dao = new UsuarioJpaController(
+                (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+        );
+
+        String nombreUsuario = request.getParameter("nombreUsuario").trim();
+        String contrasenia = request.getParameter("contrasenia").trim();
+
+        // Mapa de errores
+        Map<String, String> errores = new HashMap<>();
+
+        // Validaciones básicas
+        if (nombreUsuario == null || nombreUsuario.isBlank()) {
+            errores.put("nombreUsuario", "El usuario es obligatorio");
         }
+
+        if (contrasenia == null || contrasenia.isBlank()) {
+            errores.put("contrasenia", "La contraseña es obligatoria");
+        }
+
+        Usuario usuario = null;
+
+        if (errores.isEmpty()) {
+            usuario = dao.findUsuario(nombreUsuario);
+
+            if (usuario == null) {
+                errores.put("nombreUsuario", "El usuario no existe");
+            } else if (!usuario.getContrasena().equals(contrasenia)) {
+                errores.put("contrasenia", "Contraseña incorrecta");
+            }
+        }
+
+        // ❌ Si hay errores → volver al login
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("nombreUsuario", nombreUsuario);
+
+            request.getRequestDispatcher("/login.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        // ✅ Login correcto
+        HttpSession s = request.getSession(true);
+        s.setAttribute("usuario", usuario.getNombreUsuario());
+        s.setAttribute("tipoUsuarioSesion", usuario.getTipoUsuario());
+
+        response.sendRedirect(
+                request.getContextPath() + "/privado/SvUsuario/cargar_mis_datos"
+        );
     }
 
-    private void registrarFamilia(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        FamiliaJpaController dao = new FamiliaJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        Familia nuevaFamilia = new Familia(request.getParameter("nombre"), request.getParameter("contrasenia"), request.getParameter("telefono"), request.getParameter("nombreUsuario"));
+//    private void registrarFamilia(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        FamiliaJpaController dao = new FamiliaJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
+//        Familia nuevaFamilia = new Familia(request.getParameter("nombre"), request.getParameter("contrasenia"), request.getParameter("telefono"), request.getParameter("nombreUsuario"));
+//        try {
+//            dao.create(nuevaFamilia);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        response.sendRedirect(request.getContextPath() + "/login.jsp");
+//    }
+    private void registrarFamilia(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        String nombre = request.getParameter("nombre");
+        String contrasenia = request.getParameter("contrasenia");
+        String telefono = request.getParameter("telefono");
+        String nombreUsuario = request.getParameter("nombreUsuario");
+
+        // 🔹 Reinyectamos valores para no perderlos
+        request.setAttribute("nombre", nombre);
+        request.setAttribute("telefono", telefono);
+        request.setAttribute("nombreUsuario", nombreUsuario);
+
+        boolean hayErrores = false;
+
+        // 🔴 Validaciones
+        if (nombre == null || nombre.trim().isEmpty()) {
+            request.setAttribute("errorNombre", "El nombre de la familia es obligatorio");
+            hayErrores = true;
+        }
+
+        if (telefono == null || telefono.trim().isEmpty()) {
+            request.setAttribute("errorTelefono", "El teléfono es obligatorio");
+            hayErrores = true;
+        }
+
+        if (nombreUsuario == null || nombreUsuario.trim().isEmpty()) {
+            request.setAttribute("errorUsuario", "El nombre de usuario es obligatorio");
+            hayErrores = true;
+        }
+
+        if (contrasenia == null || contrasenia.trim().isEmpty()) {
+            request.setAttribute("errorContrasenia", "La contraseña es obligatoria");
+            hayErrores = true;
+        }
+
+        if (hayErrores) {
+            request.getRequestDispatcher("/registrarFamiliaLogin.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        FamiliaJpaController dao
+                = new FamiliaJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
+        // 🔴 Usuario ya existe
+        if (dao.findFamilia(nombreUsuario) != null) {
+            request.setAttribute("errorUsuario", "El nombre de usuario ya existe");
+            request.getRequestDispatcher("/registrarFamiliaLogin.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        // ✅ Crear familia
         try {
+            Familia nuevaFamilia = new Familia(nombre, contrasenia, telefono, nombreUsuario);
             dao.create(nuevaFamilia);
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("errorGeneral", "Error al registrar la familia");
+            request.getRequestDispatcher("/registrarFamiliaLogin.jsp")
+                    .forward(request, response);
+            return;
         }
+
+        // ✅ Todo OK → volver al login
+        HttpSession session = request.getSession();
+        session.setAttribute("mensajeExito", "Familia registrada correctamente. Ya podés iniciar sesión.");
+
         response.sendRedirect(request.getContextPath() + "/login.jsp");
+
     }
 
 }

@@ -11,7 +11,7 @@
             <div class="table-responsive">
 
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    
+
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -31,38 +31,40 @@
                                 <td>${u.color}</td>
                                 <td>${u.caracteristicas}</td>
                                 <td>${u.estadoSalud}</td>
-                                <td style="display: flex; width: 230px;">
-                                    <c:if test="${sessionScope.tipoUsuarioSesion eq 'Administrador'}">
-                                        <!-- ELIMINAR -->
-                                        <form action="${pageContext.request.contextPath}/privado/SvGato/eliminar" method="POST">
+                                <td style="width: 230px;">
+                                    <div style="display: flex; gap: 5px;">
+                                        <c:if test="${sessionScope.tipoUsuarioSesion eq 'Administrador'}">
+                                            <!-- ELIMINAR -->
+                                            <form action="${pageContext.request.contextPath}/privado/SvGato/eliminar" method="POST">
+                                                <input type="hidden" name="gato" value="${u.id}">
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-user btn-block"
+                                                        style="margin-right: 5px;">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </c:if>
+
+                                        <!-- EDITAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvGato/cargar_editar" method="GET"
+                                              style="margin-left: 5px;">
                                             <input type="hidden" name="gato" value="${u.id}">
                                             <button type="submit"
-                                                class="btn btn-danger btn-user btn-block"
-                                                style="margin-right: 5px;">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                                    class="btn btn-primary btn-user btn-block">
+                                                <i class="fas fa-pencil-alt"></i> Editar
                                             </button>
                                         </form>
-                                    </c:if>
+                                        <!-- VER QR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvGato/ver_qr" method="GET"
+                                              style="margin-left: 5px;">
+                                            <input type="hidden" name="gatoToString" value="${u.toString()}">
+                                            <button type="submit"
+                                                    class="btn btn-secondary btn-user btn-block">
+                                                <i class="fas fa-qrcode"></i> QR
+                                            </button>
+                                        </form>
 
-                                    <!-- EDITAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvGato/cargar_editar" method="GET"
-                                        style="margin-left: 5px;">
-                                        <input type="hidden" name="gato" value="${u.id}">
-                                        <button type="submit"
-                                            class="btn btn-primary btn-user btn-block">
-                                            <i class="fas fa-pencil-alt"></i> Editar
-                                        </button>
-                                    </form>
-                                    <!-- VER QR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvGato/ver_qr" method="GET"
-                                        style="margin-left: 5px;">
-                                        <input type="hidden" name="gatoToString" value="${u.toString()}">
-                                        <button type="submit"
-                                            class="btn btn-secondary btn-user btn-block">
-                                            <i class="fas fa-qrcode"></i> QR
-                                        </button>
-                                    </form>
-
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -78,7 +80,7 @@
 <c:if test="${not empty qrBase64}">
     <div class="modal fade show" id="modalQR" tabindex="-1"
          style="display:block; background: rgba(0,0,0,0.5);">
-        
+
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
@@ -86,7 +88,7 @@
                     <h5 class="modal-title">
                         <i class="fas fa-qrcode"></i> Código QR del gato
                     </h5>
-                    
+
                 </div>
 
                 <div class="modal-body text-center">
@@ -97,7 +99,7 @@
 
                 <div class="modal-footer">
                     <button class="btn btn-secondary"
-                            onclick="document.getElementById('modalQR').style.display='none'">
+                            onclick="document.getElementById('modalQR').style.display = 'none'">
                         Cerrar
                     </button>
                 </div>

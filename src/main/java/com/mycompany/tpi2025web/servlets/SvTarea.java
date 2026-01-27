@@ -6,6 +6,7 @@ package com.mycompany.tpi2025web.servlets;
 
 import com.mycompany.tpi2025web.DAOImpl.TareaJpaController;
 import com.mycompany.tpi2025web.model.Tarea;
+import com.mycompany.tpi2025web.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -24,7 +27,7 @@ public class SvTarea extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     @Override
@@ -53,22 +56,64 @@ public class SvTarea extends HttpServlet {
                 = new TareaJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
-        
+
+        Map<String, String> errores = new HashMap<>();
+
+        //datos
+        String fecha = request.getParameter("fecha");
+        String hora = request.getParameter("hora");
+        String ubicacion = request.getParameter("ubicacion");
+        String tarea = request.getParameter("tarea");
+
+        //reinyeccion
+        request.setAttribute("fechaTarea", fecha);
+        request.setAttribute("horaTarea", hora);
+        request.setAttribute("ubicacionTarea", ubicacion);
+        request.setAttribute("tipoTarea", tarea);
+
+        //validacion
+        if (fecha == null || fecha.isBlank() || !Utils.isFechaValida(fecha)) {
+            errores.put("fecha", "Fecha inválida (dd/MM/yyyy)");
+        }
+
+        if (hora == null || hora.isBlank() || !Utils.isHoraValida(hora)) {
+            errores.put("hora", "Hora inválida (HH:mm)");
+        }
+
+        if (ubicacion == null || ubicacion.isBlank()) {
+            errores.put("ubicacion", "La ubicación es obligatoria");
+        }
+
+        if (tarea == null || tarea.isBlank()) {
+            errores.put("tipoTarea", "La tarea es obligatoria");
+        }
+
+        //errores
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/registrarTareaRealizada.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+            return;
+        }
+
+        //validacion
         HttpSession s = request.getSession(false);
         Tarea nuevaTarea = new Tarea(
-                request.getParameter("fecha"),
-                request.getParameter("hora"),
+                fecha,
+                hora,
                 String.valueOf(s.getAttribute("usuario")),
-                request.getParameter("ubicacion"),
-                request.getParameter("tarea")
+                ubicacion,
+                tarea
         );
         try {
             dao.create(nuevaTarea);
+            s.setAttribute("mensajeExito", "La tarea se registró exitosamente");
         } catch (Exception e) {
             e.printStackTrace();
+            s.setAttribute("mensajeFallo", "Ocurrió un error al registrar la tarea");
         }
-        request.setAttribute("contenido", "/privado/registrarTareaRealizada.jsp");
-        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+        
+        response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=registrarTareaRealizada.jsp");
     }
 
 }

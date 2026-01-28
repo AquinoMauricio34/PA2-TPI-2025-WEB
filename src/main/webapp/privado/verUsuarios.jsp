@@ -20,6 +20,7 @@
             <div class="alert alert-danger text-center">
                 ${sessionScope.mensajeFallo}
             </div>
+            <c:remove var="mensajeFallo" scope="session"/>
         </c:if>
 
         <div class="card-body">

@@ -7,6 +7,23 @@
 
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h3 class="m-0 font-weight-bold text-primary">Diagnósticos</h3>
+
+            <!-- MENSAJE ÉXITO -->
+            <c:if test="${not empty sessionScope.mensajeExito}">
+                <div class="alert alert-success text-center">
+                    ${sessionScope.mensajeExito}
+                </div>
+                <c:remove var="mensajeExito" scope="session"/>
+            </c:if>
+
+            <!-- ERROR GENERAL -->
+            <c:if test="${not empty sessionScope.mensajeFallo}">
+                <div class="alert alert-danger text-center">
+                    ${sessionScope.mensajeFallo}
+                </div>
+                <c:remove var="mensajeFallo" scope="session"/>
+            </c:if>
+
             <input type="hidden" name="gatoId" value="${param.gato}">
             <input type="hidden" name="diagnostico" value="${diagnostico}">
             <div>
@@ -52,7 +69,7 @@
                                         <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/eliminar" method="POST">
                                             <input type="hidden" name="gatoId" value="${gato}">
                                             <input type="hidden" name="diagnostico" value="${u.id}">
-                                            <button type="submit"
+                                            <button type="submit" name="accion" value="eliminar"
                                                     class="btn btn-danger btn-user btn-block"
                                                     style="margin-right: 5px;">
                                                 <i class="fas fa-trash-alt"></i> Eliminar

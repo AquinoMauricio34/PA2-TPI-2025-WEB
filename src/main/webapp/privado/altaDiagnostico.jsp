@@ -7,16 +7,21 @@
 
     <input type="hidden" name="gatoId" value="${gatoId}">
     <input type="hidden" name="diagnostico" value="${diagnostico}">
-    <input type="hidden" name="vistaVolver" value="/altaDiagnostico.jsp">
+    <input type="hidden" name="vistaVolver" value="/privado/altaDiagnostico.jsp">
     <!-- <input type="hidden" name="accion" value="${accion}"> -->
 
     <!-- TÍTULO -->
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
-            <label for="titulo" class="form-label">Título</label>
-            <input type="text" class="form-control" id="titulo" name="titulo"
+            <label for="titulo" class="form-label">Título "${gatoId}"</label>
+            <input type="text" class="form-control ${errores.titulo != null ? 'is-invalid' : ''}" id="titulo" name="titulo"
                    placeholder="Título del diagnóstico"
-                   value="${titulo}" required>
+                   value="${titulo}">
+            <c:if test="${errores.titulo != null}">
+                <div class="invalid-feedback">
+                    ${errores.titulo}
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -24,11 +29,16 @@
     <div class="form-group row">
         <div class="col-12 mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
-            <textarea class="form-control"
+            <textarea class="form-control ${errores.descripcion != null ? 'is-invalid' : ''}"
                       id="descripcion" 
                       name="descripcion"
                       placeholder="Estado de salud, síntomas, cambios, etc."
                       rows="4">${descripcion}</textarea>
+            <c:if test="${errores.descripcion != null}">
+                <div class="invalid-feedback">
+                    ${errores.descripcion}
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -40,10 +50,25 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h4 class="m-0 font-weight-bold text-primary">Tratamientos</h4>
 
+                <!-- MENSAJE ÉXITO -->
+                <c:if test="${not empty sessionScope.mensajeExito}">
+                    <div class="alert alert-success text-center">
+                        ${sessionScope.mensajeExito}
+                    </div>
+                    <c:remove var="mensajeExito" scope="session"/>
+                </c:if>
+
+                <!-- ERROR GENERAL -->
+                <c:if test="${not empty errores.errorGeneral}">
+                    <div class="alert alert-danger text-center">
+                        ${errores.errorGeneral}
+                    </div>
+                </c:if>
+
                 <!-- Botón para agregar tratamiento -->
                 <button href="${pageContext.request.contextPath}/privado/SvDiagnostico/llamar_altaTratamiento?gatoId=${gatoId}"
                         class="btn btn-primary" type="submit" name="accion" value="agregarTratamiento">
-                        <i class="fas fa-plus"></i> Aniadir tratamiento
+                    <i class="fas fa-plus"></i> Aniadir tratamiento
                 </button>
             </div>
 
@@ -75,18 +100,18 @@
                                     </c:if>
                                     <td style="display: flex; width: 230px;">
 
-                                    <!-- ELIMINAR -->
-                                    <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/eliminar_tratamiento" method="POST">
-                                        <input type="hidden" name="tratamientoId" value="${t.id}">
-                                        <input type="hidden" name="tratamientoDescripcion" value="${t.descripcion}">
-                                        <button type="submit"
-                                            class="btn btn-danger btn-user btn-block"
-                                            style="margin-right: 5px;" name="accion" value="eliminarTratamiento">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </button>
-                                    </form>
+                                        <!-- ELIMINAR -->
+                                        <form action="${pageContext.request.contextPath}/privado/SvDiagnostico/eliminar_tratamiento" method="POST">
+                                            <input type="hidden" name="tratamientoId" value="${t.id}">
+                                            <input type="hidden" name="tratamientoDescripcion" value="${t.getDescripcion().hashCode()}">
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-block"
+                                                    style="margin-right: 5px;" name="accion" value="eliminarTratamiento">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                        </form>
 
-                                </td>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>

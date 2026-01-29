@@ -23,10 +23,15 @@
         <!-- Color -->
         <div class="col-sm-6 mb-3">
             <label for="color" class="form-label">Color</label>
-            <input type="text" class="form-control" 
+            <input type="text" class="form-control ${errorColorGato != null ? 'is-invalid' : ''}" 
                    id="color" name="color" 
                    placeholder="Color del gato" value="${g.color}"
-                   required ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'readonly'}>
+                   ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'readonly'}>
+            <c:if test="${errorColorGato != null}">
+                <div class="invalid-feedback">
+                    ${errorColorGato}
+                </div>
+            </c:if>
         </div>
     </div>
     
@@ -41,7 +46,7 @@
             <select class="form-control" 
                     id="zona" name="zonaId" 
                     required ${sessionScope.tipoUsuarioSesion eq 'Administrador' ? '' : 'disabled'}>
-                <option value="" selected disabled>Seleccione una zona</option>
+                <!--<option value="" selected disabled>Seleccione una zona</option>-->
                 <c:forEach var="zona" items="${listaZonas}">
                     
                     <option value="${zona.id}" <c:if test="${g != null && g.zona != null && g.zona.id == zona.id}">selected</c:if>>${zona.localizacion}</option>

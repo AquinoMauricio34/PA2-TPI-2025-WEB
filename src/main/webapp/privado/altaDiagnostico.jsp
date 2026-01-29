@@ -13,7 +13,7 @@
     <!-- TÍTULO -->
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
-            <label for="titulo" class="form-label">Título "${gatoId}"</label>
+            <label for="titulo" class="form-label">Título</label>
             <input type="text" class="form-control ${errores.titulo != null ? 'is-invalid' : ''}" id="titulo" name="titulo"
                    placeholder="Título del diagnóstico"
                    value="${titulo}">
@@ -92,12 +92,7 @@
                                     <td>${t.descripcion}</td>
                                     <td>${t.fecha_inicio}</td>
                                     <td>${t.fecha_fin}</td>
-                                    <c:if test="${t.abandono_tratamiento == true}">
-                                        <td>Si</td>
-                                    </c:if>
-                                    <c:if test="${t.abandono_tratamiento == false}">
-                                        <td>No</td>
-                                    </c:if>
+                                    <td>${t.abandono_tratamiento == false ? 'No' : 'Sí'}</td>
                                     <td style="display: flex; width: 230px;">
 
                                         <!-- ELIMINAR -->

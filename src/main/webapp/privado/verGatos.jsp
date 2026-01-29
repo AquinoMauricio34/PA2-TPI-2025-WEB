@@ -6,7 +6,22 @@
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Gatos</h3>
         </div>
+        
+        <!-- MENSAJE ÉXITO -->
+        <c:if test="${not empty sessionScope.mensajeExito}">
+            <div class="alert alert-success text-center">
+                ${sessionScope.mensajeExito}
+            </div>
+            <c:remove var="mensajeExito" scope="session"/>
+        </c:if>
 
+        <!-- MENSAJE FALLO -->
+        <c:if test="${not empty sessionScope.mensajeFallo}">
+            <div class="alert alert-danger text-center">
+                ${sessionScope.mensajeFallo}
+            </div>
+            <c:remove var="mensajeFallo" scope="session"/>
+        </c:if>
         <div class="card-body">
             <div class="table-responsive">
 
@@ -19,6 +34,7 @@
                             <th>Color</th>
                             <th>Caracteristicas</th>
                             <th>Estado de Salud</th>
+                            <th>¿Adoptado?</th>
                             <th style="width: 210px">Acciones</th>
                         </tr>
                     </thead>
@@ -31,6 +47,7 @@
                                 <td>${u.color}</td>
                                 <td>${u.caracteristicas}</td>
                                 <td>${u.estadoSalud}</td>
+                                <td>${u.usuario == null ? 'No' : 'Sí'}</td>
                                 <td style="width: 230px;">
                                     <div style="display: flex; gap: 5px;">
                                         <c:if test="${sessionScope.tipoUsuarioSesion eq 'Administrador'}">

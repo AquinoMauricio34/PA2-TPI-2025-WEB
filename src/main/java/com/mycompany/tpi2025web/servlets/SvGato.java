@@ -124,7 +124,6 @@ public class SvGato extends HttpServlet {
         request.setAttribute("estadoSaludG", estadoSaludG);
         request.setAttribute("zonaIdG", zonaIdG);
         request.setAttribute("listaZonas", daoZ.findZonaEntities());
-        
 
         //validacion de datos
         if (colorG == null || colorG.isBlank()) {
@@ -164,7 +163,7 @@ public class SvGato extends HttpServlet {
             Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
-        
+
         if (!errores.isEmpty()) {
             request.setAttribute("errores", errores);
             request.setAttribute("contenido", "/privado/altaGato.jsp");
@@ -176,24 +175,56 @@ public class SvGato extends HttpServlet {
 
     }
 
-    private void editar(HttpServletRequest request, HttpServletResponse response) {
+    private void editar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GatoJpaController dao = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         ZonaJpaController daoZ = new ZonaJpaController((EntityManagerFactory) getServletContext().getAttribute("emf"));
 
-        Gato g = dao.findGato(Long.parseLong(request.getParameter("idGatoOriginal")));
-        g.setNombre(request.getParameter("nombre"));
-        g.setColor(request.getParameter("color"));
-        g.setCaracteristicas(request.getParameter("caracteristicas"));
-        g.setEstadoSalud(EstadoSalud.valueOf(request.getParameter("estadoSalud")));
+        //obtencion de datos
+        String idGatoOriginal = request.getParameter("idGatoOriginal");
+        String nombreG = request.getParameter("nombre");
+        String colorG = request.getParameter("color");
+        String caracteristicasG = request.getParameter("caracteristicas");
+        String estadoSaludG = request.getParameter("estadoSalud");
+        String zonaIdG = request.getParameter("zonaId");
+        Zona zonaG = null;
+        try {
+            zonaG = daoZ.findZona(Long.valueOf(zonaIdG));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Gato gInyeccion = new Gato("", nombreG, colorG, zonaG, caracteristicasG, EstadoSalud.valueOf(estadoSaludG));
+        gInyeccion.setId(Long.valueOf(idGatoOriginal));
 
-        Zona z = daoZ.findZona(Long.parseLong(request.getParameter("zonaId")));
+        //reinyeccion
+        request.setAttribute("gatoEditar", gInyeccion);
+        request.setAttribute("listaZonas", daoZ.findZonaEntities());
+
+        //validacion
+        if (colorG == null || colorG.isBlank()) {
+            request.setAttribute("errorColorGato", "El color es obligatorio");
+            request.setAttribute("contenido", "/privado/editarGato.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+            return;
+        }
+
+        Gato g = dao.findGato(Long.parseLong(idGatoOriginal));
+        g.setNombre(nombreG);
+        g.setColor(colorG);
+        g.setCaracteristicas(caracteristicasG);
+        g.setEstadoSalud(EstadoSalud.valueOf(estadoSaludG));
+
+        Zona z = daoZ.findZona(Long.parseLong(zonaIdG));
         g.setZona(z);
+
+        HttpSession s = request.getSession(false);
 
         try {
             dao.edit(g);
             response.sendRedirect(request.getContextPath() + "/privado/SvGato/listar");
+            s.setAttribute("mensajeExito", "El gato se modificó exitosamente");
         } catch (Exception ex) {
             ex.printStackTrace();
+            s.setAttribute("mensajeFallo", "Error al modificar el gato");
         }
     }
 
@@ -218,7 +249,7 @@ public class SvGato extends HttpServlet {
         }
     }
 
-    private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         long idGato = Long.parseLong(request.getParameter("gato"));
 
         GatoJpaController dao
@@ -226,14 +257,15 @@ public class SvGato extends HttpServlet {
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
 
+        HttpSession s = request.getSession(false);
         try {
             dao.destroy(idGato);
-            response.sendRedirect(request.getContextPath() + "/privado/SvGato/listar");
-        } catch (IOException ex) {
-            Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            s.setAttribute("mensajeExito", "El gato ha sido eliminado");
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(SvGato.class.getName()).log(Level.SEVERE, null, ex);
+            s.setAttribute("mensajeFallo", "No se pudo eliminar al gato");
         }
+        response.sendRedirect(request.getContextPath() + "/privado/SvGato/listar");
     }
 
     private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

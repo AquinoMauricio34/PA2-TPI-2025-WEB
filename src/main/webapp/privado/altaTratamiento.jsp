@@ -10,34 +10,49 @@
     <input type="hidden" name="descripcion" value="${descripcion}">
     <input type="hidden" name="vistaVolver" value="${vistaVolver}">
     <input type="hidden" name="diagnosticoId" value="${diagnosticoId}">
-    
+
     <!-- FECHA INICIO -->
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
             <label for="fechaInicio" class="form-label">Fecha inicio</label>
-            <input type="text" class="form-control" id="fechaInicio" name="fechaInicio"
-                   placeholder="Fecha de inicio del tratamiento" required>
+            <input type="text" class="form-control ${errores.fechaInicio != null ? 'is-invalid' : ''}" id="fechaInicio" name="fechaInicio"
+                   placeholder="Fecha de inicio del tratamiento" value="${fechaInicio}">
+            <c:if test="${errores.fechaInicio != null}">
+                <div class="invalid-feedback">
+                    ${errores.fechaInicio}
+                </div>
+            </c:if>
         </div>
     </div>
-    
+
     <!-- FECHA FIN -->
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
             <label for="fechaFin" class="form-label">Fecha Fin</label>
-            <input type="text" class="form-control" id="fechaFin" name="fechaFin"
-                   placeholder="Fecha de fin del tratamiento" required>
+            <input type="text" class="form-control ${errores.fechaFin != null ? 'is-invalid' : ''}" id="fechaFin" name="fechaFin"
+                   placeholder="Fecha de fin del tratamiento" value="${fechaFin}">
+            <c:if test="${errores.fechaFin != null}">
+                <div class="invalid-feedback">
+                    ${errores.fechaFin}
+                </div>
+            </c:if>
         </div>
     </div>
-    
+
     <!-- DESCRIPCIÓN -->
     <div class="form-group row">
         <div class="col-12 mb-3">
             <label for="descripcionTratamiento" class="form-label">Descripción del tratamiento</label>
-            <textarea class="form-control"
+            <textarea class="form-control ${errores.descripcion != null ? 'is-invalid' : ''}"
                       id="descripcionTratamiento" 
                       name="descripcionTratamiento"
                       placeholder="Estado de salud, síntomas, cambios, etc."
-                      rows="4"></textarea>
+                      rows="4">${descripcionTratamiento}</textarea>
+            <c:if test="${errores.descripcion != null}">
+                <div class="invalid-feedback">
+                    ${errores.descripcion}
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -54,7 +69,7 @@
             </small>
         </div>
     </div>
-    
+
 
 
     <!-- BOTÓN REGISTRAR -->

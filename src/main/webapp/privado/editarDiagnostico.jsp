@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<%@ taglib prefix="c"  uri="jakarta.tags.core" %>
 
 <h1>Ver Diagnóstico</h1>
 
@@ -99,7 +100,8 @@
                                                 class="btn btn-primary"
                                                 name="accion"
                                                 value="cargarEditarTrat"
-                                                formaction="${pageContext.request.contextPath}/privado/SvTratamiento/cargar_editar?tratamientoId=${t.id}">
+                                                formaction="${pageContext.request.contextPath}/privado/SvTratamiento/cargar_editar?tratamientoId=${t.id}&tratamientoDescripcion=${t.getDescripcion().hashCode()}">
+
                                             <i class="fas fa-pencil-alt"></i> Ver
                                         </button>
 

@@ -14,8 +14,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -59,10 +62,40 @@ public class SvEstudio extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void crearEstudio(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void crearEstudio(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         EstudioJpaController dao = new EstudioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         
-        Estudio nuevoEstudio = new Estudio(Long.valueOf(request.getParameter("gatoId")), request.getParameter("titulo"), request.getParameter("descripcion"));
+        HttpSession s = request.getSession(false);
+
+        Map<String, String> errores = new HashMap<>();
+
+        //obtencion de datos
+        String gatoId = request.getParameter("gatoId");
+        String titulo = request.getParameter("titulo");
+        String descripcionEstudio = request.getParameter("descripcion");
+
+        //reiyeccion
+        request.setAttribute("gatoId", gatoId);
+        request.setAttribute("titulo", titulo);
+        request.setAttribute("descripcionEstudio", descripcionEstudio);
+
+        //validacion
+        if (titulo == null || titulo.isBlank()) {
+            errores.put("titulo", "El titulo es obligatoria");
+        }
+
+        if (descripcionEstudio == null || descripcionEstudio.isBlank()) {
+            errores.put("descripcion", "La descripción es obligatoria");
+        }
+
+        if (!errores.isEmpty()) {
+            request.setAttribute("errores", errores);
+            request.setAttribute("contenido", "/privado/registrarEstudio.jsp");
+            request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+            return;
+        }
+        
+        Estudio nuevoEstudio = new Estudio(Long.parseLong(gatoId), titulo, descripcionEstudio);
         try {
             dao.create(nuevoEstudio);
         } catch (Exception e) {

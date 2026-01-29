@@ -131,7 +131,7 @@ public class SvUsuario extends HttpServlet {
 
     }
 
-    private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String usuario = request.getParameter("usuario");
         String tipo = request.getParameter("tipo");
 
@@ -141,14 +141,15 @@ public class SvUsuario extends HttpServlet {
                 );
 
         System.out.println(tipo + "--------------------------------------------------------------------------------------------------------");
+        HttpSession s = request.getSession(false);
         try {
             dao.destroy(usuario);
-            response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/listar?tipo=" + tipo);
-        } catch (IOException ex) {
-            Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            s.setAttribute("mensajeExito", "El usuario se eliminó exitosamente");
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            s.setAttribute("mensajeFallo", "No se pudo eliminar al usuario");
         }
+        response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/listar?tipo=" + tipo);
     }
 
     private void editar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

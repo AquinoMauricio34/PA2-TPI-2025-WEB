@@ -25,18 +25,9 @@ import java.util.Map;
  *
  * @author aquin
  */
-@WebServlet(name = "SvVisita", urlPatterns = {"/privado/SvVisita/mostrar_campos", "/privado/SvVisita/crear_visita", "/privado/SvVisita/mostrar_gatos"})
+@WebServlet(name = "SvVisita", urlPatterns = {"/privado/SvVisita/mostrar_campos", "/privado/SvVisita/crear_visita","/privado/SvVisita/eliminar_visita","/privado/SvVisita/listar", "/privado/SvVisita/mostrar_gatos"})
 public class SvVisita extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -51,6 +42,8 @@ public class SvVisita extends HttpServlet {
             mostrarCampos(request, response);
         } else if (uri.endsWith("/mostrar_gatos")) {
             mostrarGatos(request, response);
+        } else if (uri.endsWith("/listar")) {
+            listar(request, response);
         }
     }
 
@@ -61,6 +54,8 @@ public class SvVisita extends HttpServlet {
 
         if (uri.endsWith("/crear_visita")) {
             crearVisita(request, response);
+        } else if (uri.endsWith("/eliminar_visita")) {
+            eliminarVisita(request, response);
         }
     }
 
@@ -135,4 +130,33 @@ public class SvVisita extends HttpServlet {
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
+    private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        VisitaSeguimientoJpaController dao
+                = new VisitaSeguimientoJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+        request.setAttribute("listaVisitas", dao.findVisitaSeguimientoEntities());
+        request.setAttribute("contenido", "/privado/verVisitas.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+    }
+
+    private void eliminarVisita(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        VisitaSeguimientoJpaController dao
+                = new VisitaSeguimientoJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
+        HttpSession s = request.getSession(false);
+        try {
+            dao.destroy(Long.valueOf(request.getParameter("visitaId")));
+            s.setAttribute("mensajeExito", "La visita se eliminó exitosamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            s.setAttribute("mensajeFallo", "No se pudo eliminar la visita");
+        }
+
+        response.sendRedirect(request.getContextPath() + "/privado/SvVisita/listar");
+
+    }
+    
 }

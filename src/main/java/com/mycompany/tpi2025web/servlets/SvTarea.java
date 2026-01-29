@@ -17,12 +17,13 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author aquin
  */
-@WebServlet(name = "SvTarea", urlPatterns = {"/privado/SvTarea/crear_tarea"})
+@WebServlet(name = "SvTarea", urlPatterns = {"/privado/SvTarea/crear_tarea", "/privado/SvTarea/listar", "/privado/SvTarea/listar_mis_tareas", "/privado/SvTarea/eliminar_tarea"})
 public class SvTarea extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +34,13 @@ public class SvTarea extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String uri = request.getRequestURI();
+
+        if (uri.endsWith("/listar")) {
+            listar(request, response);
+        } else if (uri.endsWith("/listar_mis_tareas")) {
+            listarMisTareas(request, response);
+        }
     }
 
     @Override
@@ -43,6 +50,8 @@ public class SvTarea extends HttpServlet {
 
         if (uri.endsWith("/crear_tarea")) {
             crearTarea(request, response);
+        } else if (uri.endsWith("/eliminar_tarea")) {
+            eliminarTarea(request, response);
         }
     }
 
@@ -107,13 +116,55 @@ public class SvTarea extends HttpServlet {
         );
         try {
             dao.create(nuevaTarea);
-            s.setAttribute("mensajeExito", "La tarea se registró exitosamente");
+            //s.setAttribute("mensajeExito", "La tarea se registró exitosamente");
         } catch (Exception e) {
             e.printStackTrace();
-            s.setAttribute("mensajeFallo", "Ocurrió un error al registrar la tarea");
+            //s.setAttribute("mensajeFallo", "Ocurrió un error al registrar la tarea");
         }
-        
+
         response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=registrarTareaRealizada.jsp");
+    }
+
+    private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        TareaJpaController dao
+                = new TareaJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+        request.setAttribute("listaTareasRealizadas", dao.findTareaEntities());
+        request.setAttribute("tituloJSP", "Tareas Realizadas");
+        request.setAttribute("contenido", "/privado/verTareasRealizadas.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
+    }
+
+    private void eliminarTarea(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        TareaJpaController dao
+                = new TareaJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+
+        HttpSession s = request.getSession(false);
+        try {
+            dao.destroy(Long.valueOf(request.getParameter("tareaId")));
+            s.setAttribute("mensajeExito", "La tarea realizada se eliminó exitosamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            s.setAttribute("mensajeFallo", "No se pudo eliminar la tarea realizada");
+        }
+
+        response.sendRedirect(request.getContextPath() + "/privado/SvTarea/listar");
+
+    }
+
+    private void listarMisTareas(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        TareaJpaController dao
+                = new TareaJpaController(
+                        (EntityManagerFactory) request.getServletContext().getAttribute("emf")
+                );
+        HttpSession s = request.getSession(false);
+        request.setAttribute("listaTareasRealizadas", dao.findTareaEntities().stream().filter(e -> e.getNombreUsuarioVoluntario().equals(String.valueOf(s.getAttribute("usuario")))).collect(Collectors.toList()));
+        request.setAttribute("tituloJSP", "Mis Tareas Realizadas");
+        request.setAttribute("contenido", "/privado/verTareasRealizadas.jsp");
+        request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
 }

@@ -75,6 +75,45 @@
                 </li>
 
             </c:if>
+            <c:if test="${rol eq 'Administrador' or rol eq 'Voluntario'}">
+                <!-- Sección Tareas -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTareasRealizadas"
+                       aria-expanded="true" aria-controls="collapseTareasRealizadas">
+                        <i class="fas fa-hammer"></i>
+                        <span>Tareas Realizadas</span>
+                    </a>
+                    <div id="collapseTareasRealizadas" class="collapse" aria-labelledby="headingTareasRealizadas"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=registrarTareaRealizada.jsp">Registrar Tarea</a>
+                            <c:if test="${rol eq 'Administrador'}">
+                                <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvTarea/listar">Ver Tareas Realizadas</a>
+                            </c:if>
+                            <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvTarea/listar_mis_tareas">Mis Tareas Realizadas</a>
+                        </div>
+                    </div>
+                </li>
+
+            </c:if>
+            <c:if test="${rol eq 'Administrador' or rol eq 'Voluntario'}">
+                <!-- Sección Visitas -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVisitas"
+                       aria-expanded="true" aria-controls="collapseVisitas">
+                        <i class="fas fa-eye"></i>
+                        <span>Visitas de Seguimiento</span>
+                    </a>
+                    <div id="collapseVisitas" class="collapse" aria-labelledby="headingVisitas"
+                         data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvVisita/mostrar_gatos">Registrar Visita</a>
+                                <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvVisita/listar">Ver Visitas de Seguimiento</a>
+                        </div>
+                    </div>
+                </li>
+
+            </c:if>
 
             <c:if test="${rol eq 'Administrador'}">
                 <!-- Sección Veterinario -->
@@ -150,10 +189,7 @@
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvHistorial/seleccionar_gato?direccion=/privado/SvHistorial/mostrar_historial">Historial</a>
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvEstudio/mostrar_gatos">Registrar Estudio</a>
                             </c:if>
-                            <c:if test="${rol eq 'Administrador' or rol eq 'Voluntario'}">
-
-                                <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvVisita/mostrar_gatos">Visita de Seguimiento</a>
-                            </c:if>
+                            
                         </div>
                     </div>
                 </li>

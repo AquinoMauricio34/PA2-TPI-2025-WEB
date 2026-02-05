@@ -70,24 +70,8 @@ public class SvPostulacion extends HttpServlet {
                 = new PostulacionJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
-//        UsuarioJpaController daoU
-//                    = new UsuarioJpaController(
-//                            (EntityManagerFactory) request.getServletContext().getAttribute("emf")
-//                    );
         HttpSession s = request.getSession(false);
         
-//        Usuario usuario = daoU.findUsuario(String.valueOf(s.getAttribute("usuario")));
-//        switch (usuario) {
-//            case Familia f -> f.setAptoAdopcion(false);
-//            case Hogar h -> h.setAptoAdopcion(false);
-//            default -> throw new AssertionError();
-//        }
-//        
-//        try {
-//            daoU.edit(usuario);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         
         Postulacion post = new Postulacion(String.valueOf(s.getAttribute("usuario")), Long.valueOf(request.getParameter("gato")));
         try {
@@ -116,19 +100,19 @@ public class SvPostulacion extends HttpServlet {
                 throw new Exception("No hay usuario en la sesión.");
             }
             List<Gato> listaGatos = dao.findGatoEntities();
-            //System.out.println(listaGatos);
+            
             //se quitan los gatos que ya tienen duenio
             listaGatos = listaGatos.stream()
                     .filter(g -> g.getUsuario() == null)
                     .collect(Collectors.toList());
-            //System.out.println(listaGatos);
+            
             List<Postulacion> listaPostulaciones = daoP.findPostulacionesByPostulante(String.valueOf(s.getAttribute("usuario")));
-            //System.out.println(listaPostulaciones);
+            
             //obtener los idGato de cada postulacion
             List<Long> idsPostulados = listaPostulaciones.stream()
                     .map(Postulacion::getIdGato)
                     .collect(Collectors.toList());
-            //System.out.println(listaPostulaciones);
+            
             //filtrar los gatos que NO tengan el mismo id que idsPostulados
             List<Gato> listaFiltrada = listaGatos.stream()
                     .filter(g -> !idsPostulados.contains(g.getId()))

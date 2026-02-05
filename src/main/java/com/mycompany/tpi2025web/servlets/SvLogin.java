@@ -33,7 +33,7 @@ public class SvLogin extends HttpServlet {
         HttpSession session = request.getSession(false); // NO crea sesión nueva
 
         if (session != null) {
-            session.invalidate(); // 🔥 mata la sesión
+            session.invalidate();
         }
 
         // Redirigir al login
@@ -92,7 +92,7 @@ public class SvLogin extends HttpServlet {
             }
         }
 
-        // ❌ Si hay errores → volver al login
+        //errores
         if (!errores.isEmpty()) {
             request.setAttribute("errores", errores);
             request.setAttribute("nombreUsuario", nombreUsuario);
@@ -102,7 +102,6 @@ public class SvLogin extends HttpServlet {
             return;
         }
 
-        // ✅ Login correcto
         HttpSession s = request.getSession(true);
         s.setAttribute("usuario", usuario.getNombreUsuario());
         s.setAttribute("tipoUsuarioSesion", usuario.getTipoUsuario());
@@ -112,16 +111,6 @@ public class SvLogin extends HttpServlet {
         );
     }
 
-//    private void registrarFamilia(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        FamiliaJpaController dao = new FamiliaJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-//        Familia nuevaFamilia = new Familia(request.getParameter("nombre"), request.getParameter("contrasenia"), request.getParameter("telefono"), request.getParameter("nombreUsuario"));
-//        try {
-//            dao.create(nuevaFamilia);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        response.sendRedirect(request.getContextPath() + "/login.jsp");
-//    }
     private void registrarFamilia(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
@@ -130,14 +119,14 @@ public class SvLogin extends HttpServlet {
         String telefono = request.getParameter("telefono");
         String nombreUsuario = request.getParameter("nombreUsuario");
 
-        // 🔹 Reinyectamos valores para no perderlos
+        // reinyectamos
         request.setAttribute("nombre", nombre);
         request.setAttribute("telefono", telefono);
         request.setAttribute("nombreUsuario", nombreUsuario);
 
         boolean hayErrores = false;
 
-        // 🔴 Validaciones
+        // validaciones
         if (nombre == null || nombre.trim().isEmpty()) {
             request.setAttribute("errorNombre", "El nombre de la familia es obligatorio");
             hayErrores = true;
@@ -169,7 +158,7 @@ public class SvLogin extends HttpServlet {
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
 
-        // 🔴 Usuario ya existe
+        // si el suario ya existe
         if (dao.findFamilia(nombreUsuario) != null) {
             request.setAttribute("errorUsuario", "El nombre de usuario ya existe");
             request.getRequestDispatcher("/registrarFamiliaLogin.jsp")
@@ -177,7 +166,7 @@ public class SvLogin extends HttpServlet {
             return;
         }
 
-        // ✅ Crear familia
+        // crear familia
         try {
             Familia nuevaFamilia = new Familia(nombre, contrasenia, telefono, nombreUsuario);
             dao.create(nuevaFamilia);
@@ -189,7 +178,7 @@ public class SvLogin extends HttpServlet {
             return;
         }
 
-        // ✅ Todo OK → volver al login
+        
         HttpSession session = request.getSession();
         session.setAttribute("mensajeExito", "Familia registrada correctamente. Ya podés iniciar sesión.");
 

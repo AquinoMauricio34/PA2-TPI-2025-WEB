@@ -153,13 +153,11 @@ public class GatoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             if (adoptado) {
-                // Gatos adoptados → tienen usuario
                 return em.createQuery(
                         "SELECT g FROM Gato g WHERE g.usuario IS NOT NULL",
                         Gato.class
                 ).getResultList();
             } else {
-                // Gatos NO adoptados → usuario null
                 return em.createQuery(
                         "SELECT g FROM Gato g WHERE g.usuario IS NULL",
                         Gato.class

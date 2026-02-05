@@ -22,8 +22,6 @@ public class Zona implements Serializable {
     
     private String localizacion;
     
-//    @OneToMany(mappedBy = "zona", cascade = CascadeType.ALL, orphanRemoval = false)
-//    private List<Gato> gatos = new ArrayList<>();
 
 
     public Zona() {
@@ -48,19 +46,7 @@ public class Zona implements Serializable {
     public void setLocalizacion(String localizacion) {
         this.localizacion = localizacion;
     }
-    
-    
-    
-//    public void addGato(Gato g) {
-//        gatos.add(g);
-//        g.setZona(this);
-//    }
-//
-//    public void removeGato(Gato g) {
-//        gatos.remove(g);
-//        g.setZona(null);
-//    }
-
+        
     @Override
     public String toString() {
         return "Zona{" + "id=" + id + ", localizacion=" + localizacion + '}';

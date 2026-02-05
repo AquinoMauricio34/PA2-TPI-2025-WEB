@@ -31,15 +31,8 @@
         <div class="col-sm-6 mb-3">
             <input type="text" class="form-control"
                    id="usuario" name="usuario" placeholder="Usuario" value="${usu.nombreUsuario}" readonly>
-            <!-- Campo oculto para enviar el usuario (ya que el campo visible está disabled) -->
             <input type="hidden" name="nombreUsuario" value="${usu.nombreUsuario}">
         </div>
-        <!-- Opcional: Si necesitas mostrar o editar la contraseña
-        <div class="col-sm-6 mb-3">
-            <input type="password" class="form-control form-control-user"
-                id="contrasenia" name="contrasenia" placeholder="Contraseña">
-        </div>
-        -->
     </div>
     
     <button class="btn btn-primary btn-user btn-block" type="submit">

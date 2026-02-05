@@ -59,7 +59,7 @@ public class SvGato extends HttpServlet {
         } else if (uri.endsWith("/cargar_gatos_elegir")) {
             cargarGatosEligir(request, response);
         }
-        System.out.println("svgata dogetfin");
+        
 
     }
 
@@ -77,7 +77,7 @@ public class SvGato extends HttpServlet {
         } else if (uri.endsWith("/adoptar_gato")) {
             adoptarGato(request, response);
         }
-        System.out.println("svgata dopostfin");
+        
 
     }
 
@@ -155,7 +155,7 @@ public class SvGato extends HttpServlet {
             g.setQr("QR" + g.getId());
 
             daoG.edit(g);
-            System.out.println("svgato crear try 4");
+            
             HttpSession s = request.getSession(false);
             s.setAttribute("mensajeExito", "El gato se registró exitosamente");
         } catch (Exception ex) {
@@ -308,7 +308,7 @@ public class SvGato extends HttpServlet {
         List<Postulacion> listaPostulaciones = daoP.findPostulacionesByPostulante(request.getParameter("usuario"));
         request.setAttribute("listaPostulaciones", listaPostulaciones);
         request.setAttribute("contenido", "/privado/verPostulacionAElegir.jsp");
-        System.out.println("svgato carggatoelegi");
+        
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
@@ -338,10 +338,8 @@ public class SvGato extends HttpServlet {
         if (gSel.getUsuario() != null) {
             throw new IllegalStateException("El gato ya fue adoptado");
         }
-
-        // ==========================
+        
         // ASIGNAR ADOPTANTE
-        // ==========================
         gSel.setUsuario(adoptante);
 
         if (adoptante instanceof Familia f) {
@@ -356,10 +354,8 @@ public class SvGato extends HttpServlet {
             // Persistir owning side
             daoG.edit(gSel);
             daoU.edit(adoptante);
-
-            // ==========================
+            
             // ELIMINAR TODAS LAS POSTULACIONES DEL GATO
-            // ==========================
             List<Postulacion> postulaciones
                     = daoP.findPostulacionesPorGato(gSel.getId());
 

@@ -116,10 +116,8 @@ public class SvTarea extends HttpServlet {
         );
         try {
             dao.create(nuevaTarea);
-            //s.setAttribute("mensajeExito", "La tarea se registró exitosamente");
         } catch (Exception e) {
             e.printStackTrace();
-            //s.setAttribute("mensajeFallo", "Ocurrió un error al registrar la tarea");
         }
 
         response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=registrarTareaRealizada.jsp");

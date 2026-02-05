@@ -5,7 +5,6 @@
 
 <form class="user" action="${pageContext.request.contextPath}/privado/SvTarea/crear_tarea" method="POST">
 
-    <!-- Primera fila: Fecha y Hora -->
     <div class="form-group row">
         <!-- Fecha -->
         <div class="col-sm-6 mb-3">
@@ -34,7 +33,6 @@
         </div>
     </div>
 
-    <!-- Segunda fila: Ubicacion y tipo de tarea -->
     <div class="form-group row">
         <div class="col-sm-6 mb-3">
             <label for="ubicacion" class="form-label ${errores.ubicacion != null ? 'is-invalid' : ''}">Ubicacion</label>

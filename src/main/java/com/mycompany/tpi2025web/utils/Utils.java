@@ -28,7 +28,7 @@ public class Utils {
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
-        // 🔹 Configuración para español (tildes, ñ, etc.)
+        // configuración para español
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 

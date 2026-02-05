@@ -37,7 +37,7 @@ public class SvZona extends HttpServlet {
             throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        System.out.println("zonafocus: " + request.getParameter("zonaFocusId"));
+        
         if (uri.endsWith("/listar")) {
             listar(request, response);
         } else if (uri.endsWith("/cargar_aniadir")) {
@@ -124,12 +124,12 @@ public class SvZona extends HttpServlet {
                     "error",
                     "No se puede eliminar la zona porque hay "+gatosAsociados+" gatos asignados a ella."
             );
-            System.out.println("errrrrrrrrrrrorrrrrrrrrrrrrrrr");
+            
             
             
         }else{
             try {
-                // si no hay gatos → borrar
+                // si no hay gatos para esa zona -> borrar
                 daoZ.destroy(zonaId);
             } catch (NonexistentEntityException ex) {
                 Logger.getLogger(SvZona.class.getName()).log(Level.SEVERE, null, ex);
@@ -142,17 +142,17 @@ public class SvZona extends HttpServlet {
     }
 
     private void cargarAniadir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("svzona cargaaniad 1");
+        
         ZonaJpaController dao
                 = new ZonaJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
         List<Zona> listaZonas = dao.findZonaEntities();
-        System.out.println("zonafocus: " + request.getParameter("zonaFocusId"));
+        
         request.setAttribute("zonaFocusId", request.getParameter("zonaFocusId"));
         request.setAttribute("listaZonas", listaZonas);
         request.setAttribute("contenido", "/privado/mapa.jsp");
-        System.out.println("svzona cargaaniad 2");
+        
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 

@@ -28,9 +28,6 @@ public class Diagnostico implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "tratamiento_id")
-//    private Tratamiento tratamiento=null;
     
     @OneToMany(mappedBy = "diagnostico", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Tratamiento> tratamientos = new ArrayList<>();

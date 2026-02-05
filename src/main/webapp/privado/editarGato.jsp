@@ -10,7 +10,6 @@
     <input type="hidden" name="idGatoOriginal"
            value="${g.id}">
     
-    <!-- Primera fila: Nombre y Color -->
     <div class="form-group row">
         <!-- Nombre -->
         <div class="col-sm-6 mb-3">
@@ -35,7 +34,6 @@
         </div>
     </div>
     
-    <!-- Segunda fila: Zona y Estado de Salud -->
     <div class="form-group row">
         <!-- Zona -->
         <c:if test="${sessionScope.tipoUsuarioSesion ne 'Administrador'}">
@@ -81,7 +79,6 @@
         </div>
     </div>
     
-    <!-- Tercera fila: Características (toda la fila) -->
     <div class="form-group row">
         <div class="col-12 mb-3">
             <label for="caracteristicas" class="form-label">Características</label>

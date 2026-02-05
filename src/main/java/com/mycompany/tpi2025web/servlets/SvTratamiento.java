@@ -36,7 +36,7 @@ public class SvTratamiento extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        System.out.println("svtrat ACCION: " + accion);
+        
 
         if ("cargar_editar".equals(accion)) {
             cargarEditar(request, response);
@@ -47,7 +47,7 @@ public class SvTratamiento extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String uri = request.getRequestURI();
-        System.out.println("svtrat uri: " + uri);
+        
         if (uri.endsWith("/crear")) {
             crear(request, response);
         } else if (uri.endsWith("/editar")) {
@@ -116,12 +116,12 @@ public class SvTratamiento extends HttpServlet {
         }
 
         HttpSession session = request.getSession(false);
-        System.out.println("SESSION ID = " + session.getId());
+        
         List<Tratamiento> lista = (List<Tratamiento>) session.getAttribute("tratamientosTemp");
 
         // Si aún no existe, crearla
         if (lista == null) {
-            System.out.println("-----------------Lista null se crea nueva");
+            
             lista = new ArrayList<>();
             session.setAttribute("tratamientosTemp", lista);
         }
@@ -139,18 +139,18 @@ public class SvTratamiento extends HttpServlet {
         request.setAttribute("gatoId", gatoId);
         request.setAttribute("diagnosticoId", diagnosticoId);
         request.setAttribute("contenido", vistaVolver);
-        System.out.println("Vista volver svtrat/crear: " + request.getParameter("vistaVolver"));
+        
         request.getRequestDispatcher("/privado/layout.jsp")
                 .forward(request, response);
     }
 
     private void cargarEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
-        System.out.println("AWEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        
         TratamientoJpaController daoT = new TratamientoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
 
         Tratamiento t = null;
         if (request.getParameter("tratamientoId") == null || request.getParameter("tratamientoId").isBlank()) {
-            System.out.println("UNIONNNNNNNNNNNNNNNNNN: " + request.getParameter("tratamientoDescripcion"));
+            
             int sumaHashCode = Integer.valueOf(request.getParameter("tratamientoDescripcion"));
             HttpSession s = request.getSession(false);
             List<Tratamiento> listaTratamientos = (List<Tratamiento>) s.getAttribute("tratamientosTemp");
@@ -166,14 +166,14 @@ public class SvTratamiento extends HttpServlet {
         request.setAttribute("abandonoTratamiento", t.getAbandono_tratamiento());
         request.setAttribute("tratamientoId", request.getParameter("tratamientoId"));
         request.setAttribute("gatoId", request.getParameter("gatoId"));
-        System.out.println("svtrat cargEdit gatoId: " + request.getParameter("gatoId"));
+        
         request.setAttribute("titulo", request.getParameter("titulo"));
-        System.out.println("svtrat cargEdit titulo: " + request.getParameter("titulo"));
+        
         request.setAttribute("descripcion", request.getParameter("descripcion"));
         request.setAttribute("vistaVolver", request.getParameter("vistaVolver"));
         request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
         request.setAttribute("contenido", "/privado/editarTratamiento.jsp");
-        System.out.println("svtrat cargEdit Vista volver: " + request.getParameter("vistaVolver"));
+        
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
 
     }
@@ -240,14 +240,13 @@ public class SvTratamiento extends HttpServlet {
         }
 
         HttpSession session = request.getSession(false);
-        System.out.println("SESSION ID = " + session.getId());
+        
 
         List<Tratamiento> lista
                 = (List<Tratamiento>) session.getAttribute("tratamientosTemp");
 
         Tratamiento tFinal = null;
         if (request.getParameter("descripcionAux") != null && !request.getParameter("descripcionAux").isBlank()) {
-            //lista.removeIf(e -> e.getDescripcion().equals(request.getParameter("descripcionAux")));
             Tratamiento t = new Tratamiento(descripcionTratamiento, fechaInicio, fechaFin);
             t.setAbandono_tratamiento(abandono != null);
             lista.set(lista.indexOf(lista.stream()

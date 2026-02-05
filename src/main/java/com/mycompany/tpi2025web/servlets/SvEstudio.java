@@ -132,7 +132,7 @@ public class SvEstudio extends HttpServlet {
                 = new EstudioJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
-        System.out.println("svest mostrarestu gatoId: "+request.getParameter("gato"));
+        
         List<Estudio> listaEstudios = dao.findEstudiosByGatoId(Long.parseLong(request.getParameter("gato")));
 
         request.setAttribute("gato", request.getParameter("gato"));

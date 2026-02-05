@@ -21,7 +21,6 @@
 <form class="user" action="${pageContext.request.contextPath}/privado/SvGato/crear" method="POST">
 
     <input type="hidden" name="listaZonas" value="${listaZonas}">
-    <!-- FILA 1: Nombre y Color -->
     <div class="form-group row">
 
         <!-- Nombre -->
@@ -53,7 +52,6 @@
 
     </div>
 
-    <!-- FILA 2: Zona y Estado -->
     <div class="form-group row">
 
         <!-- Zona -->
@@ -109,7 +107,6 @@
 
     </div>
 
-    <!-- FILA 3: Características -->
     <div class="form-group row">
         <div class="col-12 mb-3">
             <label for="caracteristicas">Características</label>

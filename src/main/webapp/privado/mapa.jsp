@@ -75,7 +75,7 @@
             }${!st.last ? ',' : ''}
             </c:forEach>
             ];
-            <%System.out.println("antes de zonaFocus");%>
+            <%%>
             var zonaFocusId = "${zonaFocusId}";
         </script>
 

@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%System.out.println("en el jsppppppppppppp");%>
+<%%>
 <div class="container-fluid">
     <div class="card shadow mb-4">
 

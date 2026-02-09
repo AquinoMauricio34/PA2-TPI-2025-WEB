@@ -114,13 +114,8 @@ public class SvUsuario extends HttpServlet {
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
 
-        if (!"Hogar".equals(tipo)) {
-            List<? extends Usuario> lista = dao.findPorClase(clase);
-            request.setAttribute("listaUsuarios", lista);
-        } else {
-            List<Hogar> lista = dao.findPorClase(Hogar.class);
-            request.setAttribute("listaUsuarios", lista);
-        }
+        List<? extends Usuario> lista = dao.findPorClase(clase);
+        request.setAttribute("listaUsuarios", lista);
 
         
 
@@ -200,7 +195,7 @@ public class SvUsuario extends HttpServlet {
     }
 
     private void carga_editar(HttpServletRequest request, HttpServletResponse response) {
-        Logger.getLogger("a").log(Level.SEVERE, "BAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa");
+        
         UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         Usuario usuarioEditar = dao.findUsuario(request.getParameter("usuario"));
         request.setAttribute("usuarioEditar", usuarioEditar);
@@ -210,7 +205,7 @@ public class SvUsuario extends HttpServlet {
         
 
         try {
-            Logger.getLogger("a").log(Level.SEVERE, "AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa");
+            
             request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         } catch (ServletException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
@@ -227,7 +222,6 @@ public class SvUsuario extends HttpServlet {
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
 
-        // Mapa único de errores
         Map<String, String> errores = new HashMap<>();
 
         String tipo = request.getParameter("tipo");
@@ -237,7 +231,7 @@ public class SvUsuario extends HttpServlet {
         String contrasenia = request.getParameter("contrasenia");
         String isTransitorio = request.getParameter("isTransitorio");
 
-        // Reinyectar valores (para no perder datos en el form)
+        // Reinyectar
         request.setAttribute("nombre", nombre);
         request.setAttribute("telefono", telefono);
         request.setAttribute("usuarioCrear", usuarioCrear);
@@ -279,13 +273,11 @@ public class SvUsuario extends HttpServlet {
         try {
             Class<? extends Usuario> usuarioClass = TIPOS.get(tipo);
 
-            Constructor<? extends Usuario> constructor
-                    = !tipo.equals("Hogar")
+            Constructor<? extends Usuario> constructor= !tipo.equals("Hogar")
                     ? usuarioClass.getConstructor(String.class, String.class, String.class, String.class)
                     : usuarioClass.getConstructor(String.class, String.class, String.class, String.class, boolean.class);
 
-            Usuario nuevoUsuario
-                    = !tipo.equals("Hogar")
+            Usuario nuevoUsuario= !tipo.equals("Hogar")
                     ? constructor.newInstance(nombre, contrasenia, telefono, usuarioCrear)
                     : constructor.newInstance(nombre, contrasenia, telefono, usuarioCrear, isTransitorio != null);
 

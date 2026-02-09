@@ -60,27 +60,15 @@ public class SvHistorial extends HttpServlet {
     
 
     private void mostrarHistorial(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
-        
         DiagnosticoJpaController daoD = new DiagnosticoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        
-            
         Gato gato;
         if(request.getParameter("gato")==null){
-            
             gato = daoG.findGato((Long) request.getAttribute("gato"));
-            
         }else{
-            
-            
             gato = daoG.findGato(Long.parseLong(request.getParameter("gato")));
-            
         }
-        
-        
-        
         request.getRequestDispatcher("/privado/SvDiagnostico/listar").forward(request, response);
-        
     }
 
     private void seleccionarGato(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

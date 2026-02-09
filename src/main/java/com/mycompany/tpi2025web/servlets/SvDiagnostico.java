@@ -58,7 +58,6 @@ public class SvDiagnostico extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        
 
         if ("agregarTratamiento".equals(accion)) {
             altaTratamiento(request, response);
@@ -66,22 +65,22 @@ public class SvDiagnostico extends HttpServlet {
 
         if ("crearDiagnostico".equals(accion)) {
             crear(request, response);
-            
+
         }
         if ("editarDiagnostico".equals(accion)) {
-            
+
             editar(request, response);
         }
         if ("eliminarTratamiento".equals(accion)) {
-            
+
             eliminarTratamiento(request, response);
         }
         if ("cargarEditarTrat".equals(accion)) {
-            
+
             cargarEditarTratamiento(request, response);
         }
         if ("eliminar".equals(accion)) {
-            
+
             eliminar(request, response);
         }
 
@@ -95,12 +94,12 @@ public class SvDiagnostico extends HttpServlet {
     private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DiagnosticoJpaController daoD = new DiagnosticoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         GatoJpaController daoG = new GatoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        
+
         List<Diagnostico> listaDiagnosticos = daoD.obtenerPorHistorial(daoG.findGato(Long.parseLong(request.getParameter("gato"))).getHistorial().getId());
         request.setAttribute("listaDiagnosticos", listaDiagnosticos);
         request.setAttribute("gato", request.getParameter("gato"));
         request.setAttribute("contenido", "/privado/verDiagnosticos.jsp");
-        
+
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
@@ -139,23 +138,20 @@ public class SvDiagnostico extends HttpServlet {
             return;
         }
 
-        
         Diagnostico d = new Diagnostico(request.getParameter("descripcion"), request.getParameter("titulo"), LocalDate.now());
-        
 
         for (Tratamiento t : lista) {
             t.setDiagnostico(d);  // si corresponde
             d.addTratamiento(t);
         }
-        
-        
+
         Gato g = daoG.findGato(Long.parseLong(request.getParameter("gatoId")));
         g.getHistorial().addDiagnostico(d);
 
         try {
-            
+
             daoG.edit(g);
-            
+
             session.setAttribute("mensajeExito", "El diagnostico se registró exitosamente");
         } catch (Exception ex) {
             Logger.getLogger(SvDiagnostico.class.getName()).log(Level.SEVERE, null, ex);
@@ -169,25 +165,25 @@ public class SvDiagnostico extends HttpServlet {
     }
 
     private void altaTratamiento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //todos estos datos son necesarios llevarlos para despues recuperarlos nuevamente
         request.setAttribute("titulo", request.getParameter("titulo"));
         request.setAttribute("descripcion", request.getParameter("descripcion"));
         request.setAttribute("gatoId", request.getParameter("gatoId"));
         request.setAttribute("vistaVolver", request.getParameter("vistaVolver"));
         request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
-        
-        
+
         request.setAttribute("contenido", "/privado/altaTratamiento.jsp");
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 
-    private void mostrarDiagnostico(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
-        if (request.getParameter("diagnostico") != null) {
-            request.setAttribute("diagnostico", request.getParameter("diagnostico"));
-        }
+    private void mostrarDiagnostico(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        if (request.getParameter("diagnostico") != null) {
+//            request.setAttribute("diagnostico", request.getParameter("diagnostico"));
+//        }
         request.setAttribute("gatoId", request.getParameter("gato"));
         HttpSession s = request.getSession(false);
         s.removeAttribute("tratamientosTemp");
-        
+
         request.setAttribute("contenido", "/privado/altaDiagnostico.jsp");
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
@@ -197,13 +193,13 @@ public class SvDiagnostico extends HttpServlet {
         TratamientoJpaController daoT = new TratamientoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         Diagnostico d = daoD.findDiagnostico(Long.valueOf(request.getParameter("diagnostico")));
         List<Tratamiento> listaTratamientos = daoT.obtenerPorDiagnostico(d.getId());
-        
+
         request.setAttribute("titulo", d.getDiagnostico());
         request.setAttribute("descripcion", d.getDescripcion());
         request.setAttribute("fechaDiagnostico", d.getFecha_diagnostico());
         request.setAttribute("diagnosticoId", d.getId());
         request.setAttribute("gatoId", request.getParameter("gatoId"));
-        
+
         HttpSession session = request.getSession(false);
         //para la session
         session.setAttribute("tratamientosTemp", listaTratamientos);
@@ -247,14 +243,14 @@ public class SvDiagnostico extends HttpServlet {
         if (descripcionDiag == null || descripcionDiag.isBlank()) {
             errores.put("descripcion", "El descripcion es obligatorio");
         }
-        
+
         //se crea la lista aquí porque se la necesita por si ocurre un error para volver a mostrar en el jsp
         List<Tratamiento> tratamientosSesion
                 = (List<Tratamiento>) session.getAttribute("tratamientosTemp");
         //errores
         if (!errores.isEmpty()) {
             request.setAttribute("errores", errores);
-        request.setAttribute("listaTratamientos", tratamientosSesion);
+            request.setAttribute("listaTratamientos", tratamientosSesion);
             request.setAttribute("contenido", "/privado/editarDiagnostico.jsp");
             request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
             return;
@@ -309,7 +305,6 @@ public class SvDiagnostico extends HttpServlet {
         }
 
         session.removeAttribute("tratamientosTemp");
-        
 
         response.sendRedirect(
                 request.getContextPath()
@@ -319,13 +314,11 @@ public class SvDiagnostico extends HttpServlet {
 
     private void eliminarTratamiento(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
         TratamientoJpaController daoT = new TratamientoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        
-        
+
         HttpSession session = request.getSession(false);
         List<Tratamiento> lista = (List<Tratamiento>) session.getAttribute("tratamientosTemp");
 
         //si el tratamiento tiene id null, significa que no esta en la db. La eliminacion depende de se esta o no en la db
-        
         if (request.getParameter("tratamientoId") != null && !request.getParameter("tratamientoId").isBlank()) {
             Tratamiento t = daoT.findTratamiento(Long.valueOf(request.getParameter("tratamientoId")));
             Diagnostico d = t.getDiagnostico();
@@ -335,69 +328,47 @@ public class SvDiagnostico extends HttpServlet {
             try {
                 daoT.destroy(t.getId());
             } catch (Exception e) {
-                
+
                 e.printStackTrace();
             }
         } else {
-            
-            lista.removeIf(v -> v.getId() == null && v.getDescripcion().hashCode() == Integer.parseInt(request.getParameter("tratamientoDescripcion")));
-            
-        }
 
-        
+            lista.removeIf(v -> v.getId() == null && v.getDescripcion().hashCode() == Integer.parseInt(request.getParameter("tratamientoDescripcion")));
+
+        }
 
         request.setAttribute("listaTratamientos", lista);
 
         request.setAttribute("titulo", request.getParameter("titulo"));
         request.setAttribute("descripcion", request.getParameter("descripcion"));
         request.setAttribute("gatoId", request.getParameter("gatoId"));
-        
+
         if (request.getParameter("diagnosticoId") != null) {
             request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
         }
         request.setAttribute("contenido", request.getParameter("vistaVolver"));
-        
+
         request.getRequestDispatcher("/privado/layout.jsp")
                 .forward(request, response);
 
     }
 
     private void cargarEditarTratamiento(HttpServletRequest request, HttpServletResponse response) throws ServletException, ServletException, IOException {
-        
+
         TratamientoJpaController daoT = new TratamientoJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         Tratamiento t = daoT.findTratamiento(Long.valueOf(request.getParameter("tratamientoId")));
 
         request.setAttribute("tratamientoId", request.getParameter("tratamientoId"));
-        
-
         request.setAttribute("gatoId", request.getParameter("gatoId"));
-        
-
         request.setAttribute("titulo", request.getParameter("titulo"));
-        
-
         request.setAttribute("descripcion", request.getParameter("descripcion"));
-        
-
         request.setAttribute("vistaVolver", request.getParameter("vistaVolver"));
-        
-
         request.setAttribute("diagnosticoId", request.getParameter("diagnosticoId"));
-        
-
         request.setAttribute("fechaInicio", t.getFecha_inicio());
-        
-
         request.setAttribute("fechaFin", t.getFecha_fin());
-        
-
         request.setAttribute("descripcionTratamiento", t.getDescripcion());
-        
-
         request.setAttribute("abandonoTratamiento", t.getAbandono_tratamiento());
-        
         request.setAttribute("contenido", "/privado/editarTratamiento.jsp");
-        
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
 
     }

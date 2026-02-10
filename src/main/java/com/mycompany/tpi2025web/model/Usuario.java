@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario implements Serializable,DatosTabla {
+public class Usuario implements Serializable {
     
     private String nombre;
     private String contrasenia;
@@ -77,11 +77,6 @@ public class Usuario implements Serializable,DatosTabla {
 
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
-    }
-
-    @Override
-    public Object[] obtenerDatos() {
-        return new Object[] { nombre, nombreUsuario, telefono };
     }
 
     @Override

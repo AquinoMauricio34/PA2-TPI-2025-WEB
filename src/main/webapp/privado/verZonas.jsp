@@ -24,7 +24,12 @@
                             <tr>
                                 <td>${u[0]}</td>
                                 <td>${u[1]}</td>
-                                <td>${u[2]}</td>
+                                <c:if test="${u[2] eq null}">
+                                    <td>Sin coordenadas</td>
+                                </c:if>
+                                <c:if test="${u[2] ne null}">
+                                    <td>${u[2]}</td>
+                                </c:if>
 
                                 <td>
 
@@ -42,15 +47,22 @@
                                         </form>
 
                                         <!-- VER EN MAPA -->
-                                        <form action="${pageContext.request.contextPath}/privado/SvZona/cargar_aniadir"
-                                              method="GET">
-                                            <input type="hidden" name="zonaFocusId" value="${u[0]}">
+                                        <c:choose>
+                                            <c:when test="${u[2] ne null}">
+                                                <form action="${pageContext.request.contextPath}/privado/SvZona/cargar_aniadir" method="GET">
+                                                    <input type="hidden" name="zonaFocusId" value="${u[0]}">
+                                                    <button type="submit" class="btn btn-secondary btn-user">
+                                                        <i class="fas fa-map-marker-alt"></i> Ver en Mapa
+                                                    </button>
+                                                </form>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button class="btn btn-secondary btn-user" disabled>
+                                                    <i class="fas fa-map-marker-alt"></i> Sin coordenadas
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
 
-                                            <button type="submit"
-                                                    class="btn btn-secondary btn-user">
-                                                <i class="fas fa-map-marker-alt"></i> Ver en Mapa
-                                            </button>
-                                        </form>
 
                                     </div>
                                 </td>

@@ -16,6 +16,7 @@ import com.mycompany.tpi2025web.model.Hogar;
 import com.mycompany.tpi2025web.model.Usuario;
 import com.mycompany.tpi2025web.model.Veterinario;
 import com.mycompany.tpi2025web.model.Voluntario;
+import com.mycompany.tpi2025web.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -53,7 +54,7 @@ public class SvUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String uri = request.getRequestURI();
         if (uri.endsWith("/listar")) {
             listar(request, response);
@@ -68,14 +69,13 @@ public class SvUsuario extends HttpServlet {
         } else if (uri.endsWith("/habilitar_edicion")) {
             cargarMisDatosEdicion(request, response);
         }
-        
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        
         String uri = request.getRequestURI();
         if (uri.endsWith("/eliminar")) {
             eliminar(request, response);
@@ -90,7 +90,7 @@ public class SvUsuario extends HttpServlet {
         } else if (uri.endsWith("/cargar_mis_datos")) {
             cargarMisDatos(request, response);
         }
-        
+
     }
 
     @Override
@@ -117,8 +117,6 @@ public class SvUsuario extends HttpServlet {
         List<? extends Usuario> lista = dao.findPorClase(clase);
         request.setAttribute("listaUsuarios", lista);
 
-        
-
         request.setAttribute("titulo", tipo);
         request.setAttribute("contenido", "/privado/verUsuarios.jsp");
 
@@ -135,7 +133,6 @@ public class SvUsuario extends HttpServlet {
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
 
-        
         HttpSession s = request.getSession(false);
         try {
             dao.destroy(usuario);
@@ -195,17 +192,15 @@ public class SvUsuario extends HttpServlet {
     }
 
     private void carga_editar(HttpServletRequest request, HttpServletResponse response) {
-        
+
         UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
         Usuario usuarioEditar = dao.findUsuario(request.getParameter("usuario"));
         request.setAttribute("usuarioEditar", usuarioEditar);
         request.setAttribute("tipo", usuarioEditar.getTipoUsuario());
         request.setAttribute("contenido", "/privado/editarUsuario.jsp");
 
-        
-
         try {
-            
+
             request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
         } catch (ServletException ex) {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
@@ -213,7 +208,7 @@ public class SvUsuario extends HttpServlet {
             Logger.getLogger(SvUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void crear(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -251,6 +246,9 @@ public class SvUsuario extends HttpServlet {
         if (telefono == null || telefono.trim().isEmpty()) {
             errores.put("telefono", "El teléfono es obligatorio");
         }
+        if (!Utils.isLong(telefono)) {
+            errores.put("telefono", "El telefono solo puede estar compuesto por números");
+        }
 
         if (contrasenia == null || contrasenia.trim().isEmpty()) {
             errores.put("contrasenia", "La contraseña es obligatoria");
@@ -273,11 +271,11 @@ public class SvUsuario extends HttpServlet {
         try {
             Class<? extends Usuario> usuarioClass = TIPOS.get(tipo);
 
-            Constructor<? extends Usuario> constructor= !tipo.equals("Hogar")
+            Constructor<? extends Usuario> constructor = !tipo.equals("Hogar")
                     ? usuarioClass.getConstructor(String.class, String.class, String.class, String.class)
                     : usuarioClass.getConstructor(String.class, String.class, String.class, String.class, boolean.class);
 
-            Usuario nuevoUsuario= !tipo.equals("Hogar")
+            Usuario nuevoUsuario = !tipo.equals("Hogar")
                     ? constructor.newInstance(nombre, contrasenia, telefono, usuarioCrear)
                     : constructor.newInstance(nombre, contrasenia, telefono, usuarioCrear, isTransitorio != null);
 
@@ -299,8 +297,8 @@ public class SvUsuario extends HttpServlet {
                     .forward(request, response);
             return;
         }
-        
-        response.sendRedirect(request.getContextPath() + "/privado/SvPanel?vista=index.jsp");
+
+        response.sendRedirect(request.getContextPath() + "/privado/SvUsuario/cargar_mis_datos");
     }
 
     private void cargarEmision(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -371,7 +369,7 @@ public class SvUsuario extends HttpServlet {
 
     private void editarMiUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsuarioJpaController dao = new UsuarioJpaController((EntityManagerFactory) request.getServletContext().getAttribute("emf"));
-        
+
         Usuario usuario = dao.findUsuario(request.getParameter("usuario"));
         usuario.setNombre(request.getParameter("nombre"));
         usuario.setContrasenia(request.getParameter("contrasenia"));

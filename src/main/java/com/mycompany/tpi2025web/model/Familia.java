@@ -65,11 +65,6 @@ public class Familia extends Usuario{
     public void setAptoAdopcion(boolean aptoAdopcion) {
         this.aptoAdopcion = aptoAdopcion;
     }
-    
-    @Override
-    public Object[] obtenerDatos() {
-        return new Object[] { this.getNombre(), this.getNombreUsuario(), this.getTelefono(), this.isAptoAdopcion()? "SI":"NO"};
-    }
 
     @Override
     public String toString() {

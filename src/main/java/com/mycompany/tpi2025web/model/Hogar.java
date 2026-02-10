@@ -66,9 +66,4 @@ public class Hogar extends Usuario{
         this.aptoAdopcion = aptoAdopcion;
     }
     
-    @Override
-    public Object[] obtenerDatos() {
-        return new Object[] { this.getNombre(), this.getNombreUsuario(), this.getTelefono(), this.isAptoAdopcion()? "SI":"NO"};
-    }
-    
 }

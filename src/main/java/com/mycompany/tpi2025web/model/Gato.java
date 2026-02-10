@@ -147,7 +147,13 @@ public class Gato implements Serializable {
 
     @Override
     public String toString() {
-        return "Gato:\n" + "\t* id=" + id + ",\n\t* estadoSalud=" + estadoSalud + ",\n\t* zona=" + zona.getLocalizacion() + ",\n\t* nombre=" + nombre + ",\n\t* color=" + color + ",\n\t* caracteristicas=" + caracteristicas;
+        String usu;
+        if (this.usuario != null) {
+            usu = this.usuario.getNombreUsuario();
+        } else {
+            usu = "---";
+        }
+        return "Gato:\n\t* id=" + id + ",\n\t* estadoSalud=" + estadoSalud + ",\n\t* usuario=" + usu + ",\n\t* zona=" + zona.getLocalizacion() + ",\n\t* nombre=" + nombre + ",\n\t* color=" + color + ",\n\t* caracteristicas=" + caracteristicas;
     }
     
     

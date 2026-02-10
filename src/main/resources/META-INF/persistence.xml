@@ -7,12 +7,14 @@
 
   <persistence-unit name="tpi25web" transaction-type="RESOURCE_LOCAL">
 
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <!-- Hibernate como proveedor JPA -->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
     <properties>
 
+      <!-- Conexión JDBC -->
       <property name="jakarta.persistence.jdbc.driver"
                 value="com.mysql.cj.jdbc.Driver"/>
 
@@ -22,8 +24,16 @@
       <property name="jakarta.persistence.jdbc.user" value="root"/>
       <property name="jakarta.persistence.jdbc.password" value="123"/>
 
-      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
-      <property name="eclipselink.logging.level" value="FINE"/>
+      <!-- Hibernate -->
+      <property name="hibernate.dialect"
+                value="org.hibernate.dialect.MySQLDialect"/>
+
+      <!-- MUY IMPORTANTE -->
+      <property name="hibernate.hbm2ddl.auto" value="validate"/>
+
+      <!-- Debug -->
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
 
     </properties>
 

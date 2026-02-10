@@ -140,10 +140,14 @@ public class SvDiagnostico extends HttpServlet {
 
         Diagnostico d = new Diagnostico(request.getParameter("descripcion"), request.getParameter("titulo"), LocalDate.now());
 
-        for (Tratamiento t : lista) {
-            t.setDiagnostico(d);  // si corresponde
-            d.addTratamiento(t);
+        if(lista != null){
+            for (Tratamiento t : lista) {
+                t.setDiagnostico(d);  // si corresponde
+                d.addTratamiento(t);
+            }
+            
         }
+        
 
         Gato g = daoG.findGato(Long.parseLong(request.getParameter("gatoId")));
         g.getHistorial().addDiagnostico(d);

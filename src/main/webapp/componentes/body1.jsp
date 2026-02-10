@@ -54,7 +54,7 @@
                 </li>
 
             </c:if>
-            <c:if test="${rol eq 'Administrador' or rol eq 'Voluntario'}">
+            <c:if test="${rol eq 'Administrador'}">
                 <!-- Sección Voluntario -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVoluntarios"
@@ -65,11 +65,8 @@
                     <div id="collapseVoluntarios" class="collapse" aria-labelledby="headingVoluntarios"
                          data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <c:if test="${rol eq 'Administrador'}">
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=altaUsuario.jsp&tipo=Voluntario">Crear</a>
                                 <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvUsuario/listar?tipo=Voluntario">Ver</a>
-                            </c:if>
-                            <a class="collapse-item" href="${pageContext.request.contextPath}/privado/SvPanel?vista=registrarTareaRealizada.jsp">Tarea Realizada</a>
                         </div>
                     </div>
                 </li>

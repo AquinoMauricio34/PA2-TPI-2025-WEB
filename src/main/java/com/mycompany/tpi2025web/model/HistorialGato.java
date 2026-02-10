@@ -22,7 +22,7 @@ import java.util.List;
 @Entity
 public class HistorialGato implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//estaba en sequence
     private Long id;
     @OneToMany(mappedBy = "historial", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Diagnostico> diagnosticos = new ArrayList<>();
@@ -51,7 +51,4 @@ public class HistorialGato implements Serializable {
         this.diagnosticos = diagnosticos;
     }
 
-    
-    
-    
 }

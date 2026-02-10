@@ -7,10 +7,11 @@
     <input type="hidden" name="tratamientoId" value="${tratamientoId}">
     <input type="hidden" name="gatoId" value="${gatoId}">
     <input type="hidden" name="titulo" value="${titulo}">
-    <input type="hidden" name="descripcion" value="${descripcion}">
+    <input type="hidden" name=" " value="${descripcion}">
     <input type="hidden" name="vistaVolver" value="${vistaVolver}">
     <input type="hidden" name="diagnosticoId" value="${diagnosticoId}">
     <input type="hidden" name="descripcionAux" value="${descripcionAux}">
+    <input type="hidden" name="descripcion" value="${descripcion}">
 
     <div class="form-group row">
         <div class="col-sm-6 mb-3">

@@ -155,7 +155,7 @@ public class SvTratamiento extends HttpServlet {
             HttpSession s = request.getSession(false);
             List<Tratamiento> listaTratamientos = (List<Tratamiento>) s.getAttribute("tratamientosTemp");
             t = listaTratamientos.stream().filter(e -> e.getDescripcion().hashCode() == sumaHashCode).findFirst().orElse(null);
-            request.setAttribute("descripcionAux", request.getParameter("tratamientoDescripcion"));
+            request.setAttribute("descripcionAux", request.getParameter("tratamientoDescripcion"));//ojo, viene en hashcode
         } else {
             t = daoT.findTratamiento(Long.valueOf(request.getParameter("tratamientoId")));
         }
@@ -246,11 +246,11 @@ public class SvTratamiento extends HttpServlet {
                 = (List<Tratamiento>) session.getAttribute("tratamientosTemp");
 
         Tratamiento tFinal = null;
-        if (request.getParameter("descripcionAux") != null && !request.getParameter("descripcionAux").isBlank()) {
+        if (descripcionAux != null && !descripcionAux.isBlank()) {
             Tratamiento t = new Tratamiento(descripcionTratamiento, fechaInicio, fechaFin);
             t.setAbandono_tratamiento(abandono != null);
             lista.set(lista.indexOf(lista.stream()
-                    .filter(v -> v.getDescripcion().equals(t.getDescripcion()))
+                    .filter(v -> v.getDescripcion().hashCode() == Integer.valueOf(descripcionAux))
                     .findFirst()
                     .orElse(null)
             ), t);

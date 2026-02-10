@@ -37,7 +37,7 @@ public class SvZona extends HttpServlet {
             throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        
+
         if (uri.endsWith("/listar")) {
             listar(request, response);
         } else if (uri.endsWith("/cargar_aniadir")) {
@@ -95,7 +95,21 @@ public class SvZona extends HttpServlet {
         List<List<String>> listaMostrar = new ArrayList<>();
         for (Zona z : listaZonas) {
             String[] partes = z.getLocalizacion().split("\\/");
-            listaMostrar.add(new ArrayList<>(List.of(String.valueOf(z.getId()), String.valueOf(partes[0].trim()), String.valueOf(partes[1].trim()))));
+            String parte1 = String.valueOf(partes[0].trim());
+            String parte2;
+            if (partes.length > 1) {
+                parte2 = String.valueOf(partes[1].trim());
+            } else {
+                parte2 = null;
+            }
+            List<String> fila = new ArrayList<>();
+            fila.add(String.valueOf(z.getId()));
+            fila.add(parte1);
+            fila.add(parte2); // puede ser null y NO pasa nada
+
+            listaMostrar.add(fila);
+
+//            listaMostrar.add(new ArrayList<>(List.of(String.valueOf(z.getId()), parte1, parte2)));
         }
 
         request.setAttribute("listaZonas", listaMostrar);
@@ -108,7 +122,6 @@ public class SvZona extends HttpServlet {
                 = new ZonaJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
-        
 
         Long zonaId = Long.valueOf(request.getParameter("idZona"));
 
@@ -122,12 +135,10 @@ public class SvZona extends HttpServlet {
         if (gatosAsociados > 0) {
             request.setAttribute(
                     "error",
-                    "No se puede eliminar la zona porque hay "+gatosAsociados+" gatos asignados a ella."
+                    "No se puede eliminar la zona porque hay " + gatosAsociados + " gatos asignados a ella."
             );
-            
-            
-            
-        }else{
+
+        } else {
             try {
                 // si no hay gatos para esa zona -> borrar
                 daoZ.destroy(zonaId);
@@ -136,23 +147,30 @@ public class SvZona extends HttpServlet {
             }
         }
 
-        
         request.getRequestDispatcher("/privado/SvZona/listar").forward(request, response);
 
     }
 
     private void cargarAniadir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         ZonaJpaController dao
                 = new ZonaJpaController(
                         (EntityManagerFactory) request.getServletContext().getAttribute("emf")
                 );
         List<Zona> listaZonas = dao.findZonaEntities();
-        
+
+//        if(request.getParameter("zonaFocusId")==null){
+//            request.setAttribute(
+//                    "error",
+//                    "La zona no tiene coordenadas."
+//            );
+//            request.getRequestDispatcher("/privado/SvZona/listar").forward(request, response);
+//            return;
+//        }
         request.setAttribute("zonaFocusId", request.getParameter("zonaFocusId"));
         request.setAttribute("listaZonas", listaZonas);
         request.setAttribute("contenido", "/privado/mapa.jsp");
-        
+
         request.getRequestDispatcher("/privado/layout.jsp").forward(request, response);
     }
 

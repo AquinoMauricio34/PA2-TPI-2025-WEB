@@ -5,6 +5,7 @@
 
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Seleccionar gato para registrar visita de seguimiento</h3>
+            <h5 class="m-0 font-weight-bold text-secondary">Solo gatos adoptados se listan</h5>
         </div>
 
         <div class="card-body">
